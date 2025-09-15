@@ -47,7 +47,6 @@ Use the FOUNDATIONFOODS_MCP_TOKEN environment variable to set the token.`,
 
 func init() {
 	rootCmd.Flags().Bool("stdio", false, "Run in stdio mode for local Claude Desktop integration (default: HTTP mode for remote deployment)")
-	rootCmd.Flags().Bool("fetch-db", false, "Fetch the database and exit (useful for downloading the dataset without starting the server)")
 }
 
 // runStdioMode runs the MCP server in stdio mode for Claude Desktop
