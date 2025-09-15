@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# Build script for the Go CLI application
+#
+# Usage:
+#   script/build [flags]          - Build binaries using goreleaser build (snapshot mode)
+#   script/build --release [flags] - Release binaries using goreleaser release
+#
+# The --release flag enables release mode, which:
+#   - Sets BUILD_RELEASE_MODE=1 environment variable
+#   - Uses 'goreleaser release' instead of 'goreleaser build'
+#   - Removes the --release flag before passing args to goreleaser
+#
+# All other flags are passed through to the underlying goreleaser command.
+
+set -euo pipefail
+
+SIMPLE_MODE=false
+
+# Check if --release flag is present and handle it
+RELEASE_MODE=false
+FILTERED_ARGS=()
+
+for arg in "$@"; do
+  if [[ "$arg" == "--release" ]]; then
+    RELEASE_MODE=true
+    export BUILD_RELEASE_MODE=1
+  elif [[ "$arg" == "--simple" ]]; then
+    SIMPLE_MODE=true
+  else
+    FILTERED_ARGS+=("$arg")
+  fi
+done
+
+source script/env "${FILTERED_ARGS[@]}"
+
+if [[ "$SIMPLE_MODE" == "true" ]]; then
+  # Get version tag, default to "dev" if no tags exist
+  VERSION_TAG=$(git describe --tags 2>/dev/null || echo "dev")
+  
+  CGO_ENABLED=1 \
+  GOPROXY=off \
+  GOSUMDB=off \
+  SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)" \
+  go build -trimpath -mod=vendor -v \
+    -ldflags "-s -w \
+      -X github.com/noot-app/foundation-foods-mcp-server/internal/version.tag=${VERSION_TAG} \
+      -X github.com/noot-app/foundation-foods-mcp-server/internal/version.commit=$(git rev-parse HEAD) \
+      -X github.com/noot-app/foundation-foods-mcp-server/internal/version.buildTime=$(git log -1 --format=%cI)" \
+    -o foundation-foods-mcp-server ./cmd/foundation-foods-mcp-server
+
+  echo -e "${GREEN}Built binary: ./foundation-foods-mcp-server${OFF}"
+  exit 0
+fi
+
+# Get build information for embedding into binary
+COMMIT_SHA="$(git rev-parse HEAD)"
+BUILD_TIME="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+
+#go build -mod=vendor -ldflags "-X ${PROJECT_MODULE_PATH}/internal/version.commit=${COMMIT_SHA} -X ${PROJECT_MODULE_PATH}/internal/version.buildTime=${BUILD_TIME}" -v ./cmd/go-template
+
+goreleaser check
+
+if [[ "$RELEASE_MODE" == "true" ]]; then
+  # Release mode: use goreleaser release
+  goreleaser release --clean "${FILTERED_ARGS[@]}"
+else
+  # Build mode: use goreleaser build with snapshot
+  goreleaser build --snapshot --clean "${FILTERED_ARGS[@]}"
+fi
