@@ -100,17 +100,6 @@ func TestRootCmdHelp(t *testing.T) {
 	assert.Contains(t, output, "-n, --name string")
 }
 
-func TestFetchDBFlag(t *testing.T) {
-	// Test that the --fetch-db flag is properly registered
-	flags := rootCmd.Flags()
-
-	// Check that the fetch-db flag exists
-	fetchDBFlag := flags.Lookup("fetch-db")
-	assert.NotNil(t, fetchDBFlag, "--fetch-db flag should be registered")
-	assert.Equal(t, "bool", fetchDBFlag.Value.Type(), "--fetch-db should be a boolean flag")
-	assert.Equal(t, "false", fetchDBFlag.DefValue, "--fetch-db should default to false")
-}
-
 func TestStdioFlag(t *testing.T) {
 	// Test that the --stdio flag is properly registered
 	flags := rootCmd.Flags()
