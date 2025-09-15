@@ -122,9 +122,52 @@ type QueryEngine interface {
 	// SearchFoodsByName searches for foods by their description/name
 	SearchFoodsByName(ctx context.Context, query string, limit int) ([]FoundationFood, error)
 
+	// SearchFoodsByNameSimplified searches for foods and returns simplified nutrient information
+	SearchFoodsByNameSimplified(ctx context.Context, query string, limit int) (*SimplifiedNutrientResponse, error)
+
 	// GetFoodByFdcId retrieves a specific food by its FDC ID
 	GetFoodByFdcId(ctx context.Context, fdcId int) (*FoundationFood, error)
 
 	// Health checks if the query engine is ready and operational
 	Health(ctx context.Context) error
+}
+
+// SimplifiedNutrient represents a nutrient with only essential information
+type SimplifiedNutrient struct {
+	Name       string  `json:"name"`
+	UnitName   string  `json:"unitName"`
+	Amount     float64 `json:"amount"`
+	DataPoints int     `json:"dataPoints,omitempty"`
+	Max        float64 `json:"max,omitempty"`
+	Min        float64 `json:"min,omitempty"`
+	Median     float64 `json:"median,omitempty"`
+}
+
+// SimplifiedMeasureUnit represents a simplified measure unit
+type SimplifiedMeasureUnit struct {
+	Name         string `json:"name"`
+	Abbreviation string `json:"abbreviation"`
+}
+
+// SimplifiedFoodPortion represents a simplified food portion
+type SimplifiedFoodPortion struct {
+	Value       float64               `json:"value"`
+	MeasureUnit SimplifiedMeasureUnit `json:"measureUnit"`
+	Modifier    string                `json:"modifier,omitempty"`
+	GramWeight  float64               `json:"gramWeight"`
+	Amount      float64               `json:"amount"`
+}
+
+// SimplifiedFood represents a food item with simplified nutrient information
+type SimplifiedFood struct {
+	Name         string                  `json:"name"`
+	Nutrients    []SimplifiedNutrient    `json:"nutrients"`
+	FoodPortions []SimplifiedFoodPortion `json:"foodPortions"`
+}
+
+// SimplifiedNutrientResponse represents the response for simplified nutrient searches
+type SimplifiedNutrientResponse struct {
+	Found bool             `json:"found"`
+	Count int              `json:"count"`
+	Foods []SimplifiedFood `json:"foods"`
 }

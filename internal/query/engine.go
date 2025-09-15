@@ -131,6 +131,61 @@ func (e *Engine) Health(ctx context.Context) error {
 	return nil
 }
 
+// SearchFoodsByNameSimplified searches for foods and returns simplified nutrient information
+func (e *Engine) SearchFoodsByNameSimplified(ctx context.Context, query string, limit int) (*SimplifiedNutrientResponse, error) {
+	// Use the existing search functionality
+	foods, err := e.SearchFoodsByName(ctx, query, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert to simplified format
+	simplifiedFoods := make([]SimplifiedFood, 0, len(foods))
+	for _, food := range foods {
+		simplifiedFood := SimplifiedFood{
+			Name:         food.Description,
+			Nutrients:    make([]SimplifiedNutrient, 0, len(food.FoodNutrients)),
+			FoodPortions: make([]SimplifiedFoodPortion, 0, len(food.FoodPortions)),
+		}
+
+		// Convert nutrients to simplified format
+		for _, nutrient := range food.FoodNutrients {
+			simplifiedNutrient := SimplifiedNutrient{
+				Name:       nutrient.Nutrient.Name,
+				UnitName:   nutrient.Nutrient.UnitName,
+				Amount:     nutrient.Amount,
+				DataPoints: nutrient.DataPoints,
+				Max:        nutrient.Max,
+				Min:        nutrient.Min,
+				Median:     nutrient.Median,
+			}
+			simplifiedFood.Nutrients = append(simplifiedFood.Nutrients, simplifiedNutrient)
+		}
+
+		// Convert food portions to simplified format
+		for _, portion := range food.FoodPortions {
+			simplifiedPortion := SimplifiedFoodPortion{
+				Value: portion.Value,
+				MeasureUnit: SimplifiedMeasureUnit{
+					Name:         portion.MeasureUnit.Name,
+					Abbreviation: portion.MeasureUnit.Abbreviation,
+				},
+				GramWeight: portion.GramWeight,
+				Amount:     portion.Amount,
+			}
+			simplifiedFood.FoodPortions = append(simplifiedFood.FoodPortions, simplifiedPortion)
+		}
+
+		simplifiedFoods = append(simplifiedFoods, simplifiedFood)
+	}
+
+	return &SimplifiedNutrientResponse{
+		Found: len(simplifiedFoods) > 0,
+		Count: len(simplifiedFoods),
+		Foods: simplifiedFoods,
+	}, nil
+}
+
 // normalizeString normalizes a string for better searching
 func normalizeString(s string) string {
 	// Convert to lowercase and trim whitespace
