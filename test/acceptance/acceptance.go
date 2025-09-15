@@ -14,7 +14,7 @@ import (
 
 const (
 	serverURL = "http://localhost:8080"
-	authToken = "your-secret-token"
+	authToken = "your-secret-token" // Matches .env file
 )
 
 type MCPRequest struct {
@@ -35,17 +35,16 @@ type CallToolParams struct {
 	Arguments interface{} `json:"arguments,omitempty"`
 }
 
-type SearchProductArgs struct {
+type SearchFoodsArgs struct {
 	Name  string `json:"name"`
-	Brand string `json:"brand"`
 	Limit int    `json:"limit,omitempty"`
 }
 
-// TestProduct represents a product to test with
-type TestProduct struct {
-	Name  string
-	Brand string
-	Label string // Human-readable label for reporting
+// TestFood represents a food item to test with
+type TestFood struct {
+	Name       string
+	Label      string // Human-readable label for reporting
+	ExpectedIn string // Expected to appear in results
 }
 
 // Performance test results
@@ -53,15 +52,37 @@ type PerformanceResult struct {
 	Duration     time.Duration
 	Success      bool
 	Error        string
-	Product      TestProduct
+	Food         TestFood
 	ResponseSize int
 }
 
 type InitializedParams struct{}
 
+var debugMode bool
+
+func debugPrint(label string, data []byte) {
+	if debugMode {
+		fmt.Printf("\n🐛 DEBUG - %s:\n", label)
+		// Pretty print JSON if possible
+		var prettyJSON bytes.Buffer
+		if err := json.Indent(&prettyJSON, data, "", "  "); err == nil {
+			fmt.Printf("%s\n\n", prettyJSON.String())
+		} else {
+			fmt.Printf("%s\n\n", string(data))
+		}
+	}
+}
+
 func main() {
-	fmt.Printf("🧪 Simple MCP API Key Authentication Test\n")
-	fmt.Printf("Testing: API key authentication and basic MCP protocol\n\n")
+	// Parse command line arguments
+	for _, arg := range os.Args[1:] {
+		if arg == "--debug" {
+			debugMode = true
+		}
+	}
+
+	fmt.Printf("🧪 Foundation Foods MCP Server - Acceptance Tests\n")
+	fmt.Printf("Testing: USDA Foundation Foods database search and MCP protocol\n\n")
 
 	// Test 1: Health check (no auth required)
 	fmt.Printf("1. Testing health endpoint (no auth)...\n")
@@ -95,13 +116,13 @@ func main() {
 	}
 	fmt.Printf("✅ MCP endpoint accepted correct API key\n\n")
 
-	// Test 5: MCP tool call for product search
-	fmt.Printf("5. Testing MCP tool call for product search...\n")
+	// Test 5: MCP tool call for Foundation Foods search
+	fmt.Printf("5. Testing MCP tool call for Foundation Foods search...\n")
 	if err := testMCPToolCall(); err != nil {
 		fmt.Printf("❌ MCP tool call failed: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("✅ MCP tool call succeeded with valid results\n\n")
+	fmt.Printf("✅ MCP tool call succeeded with valid Foundation Foods results\n\n")
 
 	// Test 6: Performance testing under load
 	fmt.Printf("6. Testing server performance under concurrent load...\n")
@@ -111,8 +132,8 @@ func main() {
 	}
 	fmt.Printf("✅ Server handles concurrent load with excellent performance\n\n")
 
-	fmt.Printf("🎉 All API key authentication and performance tests passed!\n")
-	fmt.Printf("💡 Your MCP server is production-ready with simple API key authentication and high-performance concurrent handling.\n")
+	fmt.Printf("🎉 All Foundation Foods MCP tests passed!\n")
+	fmt.Printf("💡 Your Foundation Foods MCP server is production-ready with comprehensive USDA food data.\n")
 }
 
 func testHealth() error {
@@ -235,6 +256,9 @@ func testMCPWithCorrectAuth() error {
 		return fmt.Errorf("failed to read response: %w", err)
 	}
 
+	// Debug print the JSON response
+	debugPrint("MCP Initialize Response", body)
+
 	// MCP responses come as Server-Sent Events
 	if !strings.Contains(string(body), "serverInfo") {
 		return fmt.Errorf("response doesn't contain expected MCP initialize result")
@@ -244,44 +268,45 @@ func testMCPWithCorrectAuth() error {
 }
 
 func testMCPToolCall() error {
-	fmt.Printf("    Running tests: 5 queries for Olipop Cream Soda...\n")
+	fmt.Printf("    Running tests: 5 queries for common foods...\n")
 
-	for i := 1; i <= 5; i++ {
-		fmt.Printf("   🧪 Query %d/5: ", i)
+	testQueries := []string{"milk", "cheese", "bread", "eggs", "chicken"}
+
+	for i, query := range testQueries {
+		fmt.Printf("   🧪 Query %d/5 (%s): ", i+1, query)
 
 		start := time.Now()
 
 		// Make the tool call
-		err := performSingleToolCall(i)
+		err := performSingleToolCall(i+1, query)
 		if err != nil {
-			return fmt.Errorf("query %d failed: %w", i, err)
+			return fmt.Errorf("query %d (%s) failed: %w", i+1, query, err)
 		}
 
 		duration := time.Since(start)
 
-		// Verify response time is under 3 seconds (allowing for database cold starts)
+		// Verify response time is under 3 seconds (allowing for JSON parsing)
 		if duration > 3*time.Second {
-			return fmt.Errorf("query %d took %v, expected under 3 seconds", i, duration)
+			return fmt.Errorf("query %d (%s) took %v, expected under 3 seconds", i+1, query, duration)
 		}
 
 		fmt.Printf("✅ (%.3fs)\n", duration.Seconds())
 	}
 
-	fmt.Printf("   🎯 All 5 queries completed successfully with validation\n")
+	fmt.Printf("   🎯 All 5 Foundation Foods queries completed successfully\n")
 	return nil
 }
 
-func performSingleToolCall(requestID int) error {
+func performSingleToolCall(requestID int, foodName string) error {
 	req := MCPRequest{
 		JSONRPC: "2.0",
 		ID:      requestID,
 		Method:  "tools/call",
 		Params: CallToolParams{
-			Name: "search_products_by_brand_and_name",
-			Arguments: SearchProductArgs{
-				Name:  "Cream Soda",
-				Brand: "Olipop",
-				Limit: 10,
+			Name: "search_foundation_foods_by_name",
+			Arguments: SearchFoodsArgs{
+				Name:  foodName,
+				Limit: 3,
 			},
 		},
 	}
@@ -308,6 +333,9 @@ func performSingleToolCall(requestID int) error {
 	if err != nil {
 		return fmt.Errorf("failed to read response: %w", err)
 	}
+
+	// Debug print the JSON response
+	debugPrint(fmt.Sprintf("MCP Response for '%s'", foodName), body)
 
 	// Parse the MCP response directly as JSON
 	var mcpResponse map[string]interface{}
@@ -336,98 +364,83 @@ func performSingleToolCall(requestID int) error {
 		return fmt.Errorf("MCP response content[0].text is not a string")
 	}
 
-	// Validate that we got some product data
-	if !strings.Contains(text, "product") && !strings.Contains(text, "Olipop") {
-		return fmt.Errorf("response doesn't contain expected product data: %s", text)
+	// Validate that we got Foundation Foods data
+	if !strings.Contains(text, "products") && !strings.Contains(text, "found") {
+		return fmt.Errorf("response doesn't contain expected Foundation Foods data: %s", text)
 	}
 
-	// Debug: print the raw response text first
-	// fmt.Printf("Raw response text: %s\n", text)
-
-	// Parse the response to check for specific attributes on OLIPOP Cream Soda
-	var productResponse map[string]interface{}
-	if err := json.Unmarshal([]byte(text), &productResponse); err != nil {
-		return fmt.Errorf("failed to parse product response JSON: %w", err)
+	// Parse the response to check for Foundation Foods structure
+	var foodsResponse map[string]interface{}
+	if err := json.Unmarshal([]byte(text), &foodsResponse); err != nil {
+		return fmt.Errorf("failed to parse Foundation Foods response JSON: %w", err)
 	}
 
-	products, ok := productResponse["products"].([]interface{})
+	products, ok := foodsResponse["products"].([]interface{})
 	if !ok || len(products) == 0 {
-		return fmt.Errorf("no products found in response")
+		return fmt.Errorf("no Foundation Foods found in response")
 	}
 
-	// Check the first product for OLIPOP Cream Soda serving attributes
-	firstProduct, productOk := products[0].(map[string]interface{})
-	if !productOk {
-		return fmt.Errorf("first product is not a valid object")
+	// Check the first food item for expected Foundation Foods attributes
+	firstFood, foodOk := products[0].(map[string]interface{})
+	if !foodOk {
+		return fmt.Errorf("first food item is not a valid object")
 	}
 
-	// Validate serving_quantity exists and has expected value for OLIPOP Cream Soda
-	servingQuantity, hasServingQuantity := firstProduct["serving_quantity"]
-	if !hasServingQuantity {
-		return fmt.Errorf("serving_quantity attribute missing from OLIPOP Cream Soda")
+	// Validate description exists (core field for Foundation Foods)
+	description, hasDescription := firstFood["description"]
+	if !hasDescription {
+		return fmt.Errorf("description attribute missing from Foundation Food")
 	}
 
-	// Check that serving_quantity is "355" (as string) or 355 (as number) for OLIPOP Cream Soda
-	servingQuantityStr := fmt.Sprintf("%v", servingQuantity)
-	if servingQuantityStr != "355" {
-		return fmt.Errorf("serving_quantity should be '355' for OLIPOP Cream Soda, got: %v", servingQuantity)
-	}
-
-	// Validate serving_quantity_unit exists and is "ml" (optional field)
-	servingQuantityUnit, hasServingQuantityUnit := firstProduct["serving_quantity_unit"]
-	if hasServingQuantityUnit && servingQuantityUnit != "" && servingQuantityUnit != nil {
-		if servingQuantityUnit != "ml" {
-			return fmt.Errorf("serving_quantity_unit should be 'ml' for OLIPOP Cream Soda, got: %v", servingQuantityUnit)
-		}
-	}
-
-	// Validate serving_size exists and contains expected content
-	servingSize, hasServingSize := firstProduct["serving_size"]
-	if !hasServingSize {
-		return fmt.Errorf("serving_size attribute missing from OLIPOP Cream Soda")
-	}
-	servingSizeStr, ok := servingSize.(string)
+	descriptionStr, ok := description.(string)
 	if !ok {
-		return fmt.Errorf("serving_size should be a string, got: %T", servingSize)
+		return fmt.Errorf("description should be a string, got: %T", description)
 	}
-	if !strings.Contains(servingSizeStr, "355") || !strings.Contains(servingSizeStr, "ml") {
-		return fmt.Errorf("serving_size should contain '355' and 'ml' for OLIPOP Cream Soda, got: %s", servingSizeStr)
+
+	// Validate fdcId exists (unique identifier for Foundation Foods)
+	fdcId, hasFdcId := firstFood["fdcId"]
+	if !hasFdcId {
+		return fmt.Errorf("fdcId attribute missing from Foundation Food")
+	}
+
+	// Validate foodNutrients exists (nutritional data)
+	foodNutrients, hasFoodNutrients := firstFood["foodNutrients"]
+	if !hasFoodNutrients {
+		return fmt.Errorf("foodNutrients attribute missing from Foundation Food")
+	}
+
+	nutrients, ok := foodNutrients.([]interface{})
+	if !ok {
+		return fmt.Errorf("foodNutrients should be an array, got: %T", foodNutrients)
 	}
 
 	// Print successful validation
-	fmt.Printf("    ✓ Serving attributes validated for OLIPOP Cream Soda\n")
-	fmt.Printf("    ✓ serving_quantity: %v\n", servingQuantity)
-	if hasServingQuantityUnit && servingQuantityUnit != "" && servingQuantityUnit != nil {
-		fmt.Printf("    ✓ serving_quantity_unit: %v\n", servingQuantityUnit)
-	} else {
-		fmt.Printf("    ℹ serving_quantity_unit: not available\n")
-	}
-	fmt.Printf("    ✓ serving_size: %s\n", servingSizeStr)
-
-	// print the full response for debugging
-	// fmt.Printf("Full response: %s\n", text)
+	fmt.Printf("    ✓ Foundation Food validated successfully\n")
+	fmt.Printf("    ✓ Description: %s\n", descriptionStr)
+	fmt.Printf("    ✓ FDC ID: %v\n", fdcId)
+	fmt.Printf("    ✓ Nutrients: %d entries\n", len(nutrients))
 
 	return nil
 }
 
 // testPerformanceUnderLoad tests the server with concurrent requests from multiple clients
 func testPerformanceUnderLoad() error {
-	// Define test products based on user examples
-	testProducts := []TestProduct{
-		{Name: "Mini Oreos", Brand: "oreos", Label: "Mini Oreos (Oreos)"},
-		{Name: "Cheddar Crisps", Brand: "goldfish", Label: "Cheddar Crisps (Goldfish)"},
-		{Name: "Vegan protein, chocolate", Brand: "promix", Label: "Vegan Protein Chocolate (Promix)"},
-		{Name: "RedBull Lime Edition", Brand: "redbull", Label: "RedBull Lime Edition"},
-		{Name: "Nantucket Dark Chocolate", Brand: "pepperidge", Label: "Nantucket Dark Chocolate (Pepperidge)"},
-		{Name: "orange", Brand: "olipop", Label: "Orange (Olipop)"},
-		{Name: "cola", Brand: "olipop", Label: "Cola (Olipop)"},
+	// Define test foods based on common Foundation Foods entries
+	testFoods := []TestFood{
+		{Name: "milk", Label: "Milk (dairy)", ExpectedIn: "Milk"},
+		{Name: "cheese", Label: "Cheese (dairy)", ExpectedIn: "Cheese"},
+		{Name: "bread", Label: "Bread (grains)", ExpectedIn: "Bread"},
+		{Name: "chicken", Label: "Chicken (protein)", ExpectedIn: "Chicken"},
+		{Name: "broccoli", Label: "Broccoli (vegetable)", ExpectedIn: "Broccoli"},
+		{Name: "apple", Label: "Apple (fruit)", ExpectedIn: "Apple"},
+		{Name: "egg", Label: "Eggs (protein)", ExpectedIn: "Egg"},
 	}
 
-	fmt.Printf("   🚀 Starting performance tests with %d different products...\n", len(testProducts))
+	fmt.Printf("   🚀 Starting performance tests with %d different Foundation Foods...\n", len(testFoods))
 
 	// First, test single-client baseline performance
 	fmt.Printf("   📊 Phase 1: Single-client baseline performance...\n")
-	if err := runBaselineTest(testProducts); err != nil {
+	if err := runBaselineTest(testFoods); err != nil {
 		return fmt.Errorf("baseline test failed: %w", err)
 	}
 
@@ -441,7 +454,7 @@ func testPerformanceUnderLoad() error {
 	for _, concurrency := range concurrencyLevels {
 		fmt.Printf("   🔄 Testing %d concurrent clients (%d requests each)...\n", concurrency, requestsPerLevel)
 
-		if err := runConcurrencyTest(testProducts, concurrency, requestsPerLevel); err != nil {
+		if err := runConcurrencyTest(testFoods, concurrency, requestsPerLevel); err != nil {
 			fmt.Printf("   ⚠️  Warning at %d clients: %v\n", concurrency, err)
 			fmt.Printf("   📝 This indicates the server may need DuckDB optimization for higher concurrency\n\n")
 			break // Stop testing higher concurrency if we hit issues
@@ -457,7 +470,7 @@ func testPerformanceUnderLoad() error {
 }
 
 // runBaselineTest establishes single-client performance baseline
-func runBaselineTest(testProducts []TestProduct) error {
+func runBaselineTest(testFoods []TestFood) error {
 	fmt.Printf("      🔍 Running 5 sequential requests to establish baseline...\n")
 
 	var totalDuration time.Duration
@@ -465,10 +478,10 @@ func runBaselineTest(testProducts []TestProduct) error {
 	var minDuration time.Duration = time.Hour
 
 	for i := 0; i < 5; i++ {
-		product := testProducts[i%len(testProducts)]
+		food := testFoods[i%len(testFoods)]
 
 		start := time.Now()
-		_, err := performProductSearch(product, i+1000)
+		_, err := performFoodSearch(food, i+1000)
 		duration := time.Since(start)
 
 		if err != nil {
@@ -496,7 +509,7 @@ func runBaselineTest(testProducts []TestProduct) error {
 }
 
 // runConcurrencyTest executes a specific concurrency test scenario
-func runConcurrencyTest(testProducts []TestProduct, concurrency, requestsPerClient int) error {
+func runConcurrencyTest(testFoods []TestFood, concurrency, requestsPerClient int) error {
 	var wg sync.WaitGroup
 	results := make(chan PerformanceResult, concurrency*requestsPerClient)
 
@@ -513,19 +526,19 @@ func runConcurrencyTest(testProducts []TestProduct, concurrency, requestsPerClie
 			// Small delay between client startups to avoid thundering herd
 			time.Sleep(time.Duration(clientID*10) * time.Millisecond)
 
-			// Each client makes multiple requests with different products
+			// Each client makes multiple requests with different foods
 			for requestID := 0; requestID < requestsPerClient; requestID++ {
-				// Cycle through test products
-				product := testProducts[requestID%len(testProducts)]
+				// Cycle through test foods
+				food := testFoods[requestID%len(testFoods)]
 
 				start := time.Now()
-				responseSize, err := performProductSearch(product, clientID*1000+requestID+100)
+				responseSize, err := performFoodSearch(food, clientID*1000+requestID+100)
 				duration := time.Since(start)
 
 				result := PerformanceResult{
 					Duration:     duration,
 					Success:      err == nil,
-					Product:      product,
+					Food:         food,
 					ResponseSize: responseSize,
 				}
 
@@ -556,7 +569,7 @@ func runConcurrencyTest(testProducts []TestProduct, concurrency, requestsPerClie
 	totalResponseSize := 0
 
 	var failures []string
-	productStats := make(map[string][]time.Duration)
+	foodStats := make(map[string][]time.Duration)
 
 	for result := range results {
 		totalRequests++
@@ -573,8 +586,8 @@ func runConcurrencyTest(testProducts []TestProduct, concurrency, requestsPerClie
 				minDuration = result.Duration
 			}
 
-			// Track per-product performance
-			productStats[result.Product.Label] = append(productStats[result.Product.Label], result.Duration)
+			// Track per-food performance
+			foodStats[result.Food.Label] = append(foodStats[result.Food.Label], result.Duration)
 		} else {
 			failures = append(failures, result.Error)
 		}
@@ -618,17 +631,17 @@ func runConcurrencyTest(testProducts []TestProduct, concurrency, requestsPerClie
 		fmt.Printf("      ⚠️  Max response time %.3fs exceeds optimal %.1fs (but within acceptable limits)\n", maxDuration.Seconds(), maxAllowedTime.Seconds())
 	}
 
-	// Print per-product performance breakdown only if we have successful requests
+	// Print per-food performance breakdown only if we have successful requests
 	if successfulRequests > 0 {
-		fmt.Printf("      🎯 Per-Product Performance:\n")
-		for productLabel, durations := range productStats {
+		fmt.Printf("      🎯 Per-Food Performance:\n")
+		for foodLabel, durations := range foodStats {
 			if len(durations) > 0 {
 				var sum time.Duration
 				for _, d := range durations {
 					sum += d
 				}
 				avg := sum / time.Duration(len(durations))
-				fmt.Printf("         • %s: %.3fs avg (%d requests)\n", productLabel, avg.Seconds(), len(durations))
+				fmt.Printf("         • %s: %.3fs avg (%d requests)\n", foodLabel, avg.Seconds(), len(durations))
 			}
 		}
 	}
@@ -636,17 +649,16 @@ func runConcurrencyTest(testProducts []TestProduct, concurrency, requestsPerClie
 	return nil
 }
 
-// performProductSearch executes a single product search and returns response size
-func performProductSearch(product TestProduct, requestID int) (int, error) {
+// performFoodSearch executes a single Foundation Food search and returns response size
+func performFoodSearch(food TestFood, requestID int) (int, error) {
 	req := MCPRequest{
 		JSONRPC: "2.0",
 		ID:      requestID,
 		Method:  "tools/call",
 		Params: CallToolParams{
-			Name: "search_products_by_brand_and_name",
-			Arguments: SearchProductArgs{
-				Name:  product.Name,
-				Brand: product.Brand,
+			Name: "search_foundation_foods_by_name",
+			Arguments: SearchFoodsArgs{
+				Name:  food.Name,
 				Limit: 3, // Smaller limit for performance testing
 			},
 		},
@@ -678,6 +690,9 @@ func performProductSearch(product TestProduct, requestID int) (int, error) {
 
 	responseSize := len(body)
 
+	// Debug print the JSON response
+	debugPrint(fmt.Sprintf("Performance Test Response for '%s' (req #%d)", food.Name, requestID), body)
+
 	// Parse the MCP response directly as JSON
 	var mcpResponse map[string]interface{}
 	if err := json.Unmarshal(body, &mcpResponse); err != nil {
@@ -705,9 +720,9 @@ func performProductSearch(product TestProduct, requestID int) (int, error) {
 		return responseSize, fmt.Errorf("MCP response content[0].text is not a string")
 	}
 
-	// Basic validation that we got some product data
-	if !strings.Contains(text, "product") {
-		return responseSize, fmt.Errorf("response doesn't contain expected product data")
+	// Basic validation that we got some Foundation Foods data
+	if !strings.Contains(text, "products") && !strings.Contains(text, "found") {
+		return responseSize, fmt.Errorf("response doesn't contain expected Foundation Foods data")
 	}
 
 	return responseSize, nil

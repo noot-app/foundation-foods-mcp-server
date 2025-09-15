@@ -117,6 +117,7 @@ This will start an HTTP server on the configured port (default 8080) with:
 | `FOUNDATIONFOODS_MCP_TOKEN` | Yes (HTTP mode) | - | Bearer token for authentication |
 | `PORT` | No | `8080` | HTTP server port (HTTP mode only) |
 | `ENV` | No | `production` | Environment (development/production) |
+| `LOG_LEVEL` | No | `INFO` | The log level |
 
 ### HTTP Endpoints (HTTP Mode Only)
 

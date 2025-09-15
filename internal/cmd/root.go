@@ -1,11 +1,10 @@
 package cmd
 
 import (
-	"context"
-
 	"github.com/noot-app/foundation-foods-mcp-server/internal/auth"
 	"github.com/noot-app/foundation-foods-mcp-server/internal/config"
 	"github.com/noot-app/foundation-foods-mcp-server/internal/mcpgo"
+	"github.com/noot-app/foundation-foods-mcp-server/internal/query"
 	"github.com/spf13/cobra"
 )
 
@@ -65,15 +64,18 @@ func runStdioMode(cmd *cobra.Command, args []string) error {
 		"auth", "not required for stdio mode",
 		"transport", "stdio pipes")
 
-	// TODO: hydrate the json dataset file from the config
-
-	ctx := context.Background()
+	// Load Foundation Foods data
+	queryEngine, err := query.NewEngine(cfg.FoundationFoodsJsonFile, logger)
+	if err != nil {
+		logger.Error("Failed to initialize query engine", "error", err)
+		return err
+	}
 
 	// Create auth (not needed for stdio but required by constructor)
 	authenticator := auth.NewBearerTokenAuth(cfg.AuthToken)
 
 	// Create MCP server
-	mcpSrv := mcpgo.NewServer(someJsonQueryEngineHereTodo, authenticator, logger)
+	mcpSrv := mcpgo.NewServer(queryEngine, authenticator, logger)
 
 	// Run the MCP server on stdio transport (no auth needed for local use)
 	return mcpSrv.ServeStdio()
@@ -94,16 +96,18 @@ func runHTTPMode(cmd *cobra.Command, args []string) error {
 		"transport", "HTTP/JSON-RPC 2.0",
 		"port", cfg.Port)
 
-	// TODO: hydrate the json dataset file from the configlogger,
-
-	// Ensure dataset is available
-	ctx := context.Background()
+	// Load Foundation Foods data
+	queryEngine, err := query.NewEngine(cfg.FoundationFoodsJsonFile, logger)
+	if err != nil {
+		logger.Error("Failed to initialize query engine", "error", err)
+		return err
+	}
 
 	// Create auth
 	authenticator := auth.NewBearerTokenAuth(cfg.AuthToken)
 
 	// Create MCP server
-	mcpSrv := mcpgo.NewServer(someJsonQueryEngineHereTodo, authenticator, logger)
+	mcpSrv := mcpgo.NewServer(queryEngine, authenticator, logger)
 
 	// Run the MCP server on HTTP transport with auth
 	return mcpSrv.ServeHTTP(":" + cfg.Port)

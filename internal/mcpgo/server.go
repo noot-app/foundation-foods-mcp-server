@@ -6,13 +6,11 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"sync"
-	"time"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/noot-app/foundation-foods-mcp-server/internal/auth"
-	"github.com/noot-app/foundation-foods-mcp-server/internal/types"
+	"github.com/noot-app/foundation-foods-mcp-server/internal/query"
 )
 
 // responseRecorder wraps http.ResponseWriter to capture response details
@@ -43,31 +41,14 @@ func (r *responseRecorder) Write(data []byte) (int, error) {
 
 // Server wraps the mark3labs MCP server with authentication
 type Server struct {
-	mcpServer *server.MCPServer
-	auth      *auth.BearerTokenAuth
-	log       *slog.Logger
-
-	// Health check caching to prevent DOS attacks
-	healthMu        sync.RWMutex
-	lastHealthCheck time.Time
-	lastHealthError error
-}
-
-// SearchProductsResponse represents the response from search_products_by_brand_and_name
-type SearchProductsResponse struct {
-	Found    bool            `json:"found"`
-	Count    int             `json:"count"`
-	Products []types.Product `json:"products"`
-}
-
-// SearchBarcodeResponse represents the response from search_by_barcode
-type SearchBarcodeResponse struct {
-	Found   bool           `json:"found"`
-	Product *types.Product `json:"product,omitempty"`
+	mcpServer   *server.MCPServer
+	queryEngine query.QueryEngine
+	auth        *auth.BearerTokenAuth
+	log         *slog.Logger
 }
 
 // NewServer creates a new MCP server with the mark3labs SDK
-func NewServer(someJsonQueryEngineHereTodo query.QueryEngine, authenticator *auth.BearerTokenAuth, logger *slog.Logger) *Server {
+func NewServer(queryEngine query.QueryEngine, authenticator *auth.BearerTokenAuth, logger *slog.Logger) *Server {
 	// Create MCP server
 	mcpServer := server.NewMCPServer(
 		"FoundationFoods MCP Server",
@@ -78,10 +59,10 @@ func NewServer(someJsonQueryEngineHereTodo query.QueryEngine, authenticator *aut
 	)
 
 	s := &Server{
-		mcpServer:                   mcpServer,
-		someJsonQueryEngineHereTodo: someJsonQueryEngineHereTodo,
-		auth:                        authenticator,
-		log:                         logger,
+		mcpServer:   mcpServer,
+		queryEngine: queryEngine,
+		auth:        authenticator,
+		log:         logger,
 	}
 
 	// Add tools
@@ -105,7 +86,7 @@ func (s *Server) addTools() {
 			mcp.Min(1),
 			mcp.Max(10),
 		),
-		mcp.WithOutputSchema[NutrientResponse](),
+		mcp.WithOutputSchema[query.SearchProductsResponse](),
 		mcp.WithIdempotentHintAnnotation(true),
 	)
 
@@ -229,7 +210,7 @@ func (s *Server) handleFoodSearch(ctx context.Context, request mcp.CallToolReque
 	}
 
 	// Prepare structured response
-	response := SearchProductsResponse{
+	response := query.SearchProductsResponse{
 		Found:    len(products) > 0,
 		Count:    len(products),
 		Products: products,
