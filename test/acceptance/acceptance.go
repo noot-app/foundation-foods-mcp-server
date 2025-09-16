@@ -148,8 +148,16 @@ func main() {
 	}
 	fmt.Printf("✅ Custom nutrient filtering works correctly\n\n")
 
-	// Test 9: Performance testing under load
-	fmt.Printf("9. Testing server performance under concurrent load...\n")
+	// Test 9: Test fixed default nutrients search (no customization allowed)
+	fmt.Printf("9. Testing fixed default nutrients search...\n")
+	if err := testFixedDefaultNutrientsSearch(); err != nil {
+		fmt.Printf("❌ Fixed default nutrients search test failed: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Printf("✅ Fixed default nutrients search works correctly\n\n")
+
+	// Test 10: Performance testing under load
+	fmt.Printf("10. Testing server performance under concurrent load...\n")
 	if err := testPerformanceUnderLoad(); err != nil {
 		fmt.Printf("❌ Performance test failed: %v\n", err)
 		os.Exit(1)
@@ -872,6 +880,173 @@ func testCustomNutrientFiltering() error {
 	}
 
 	fmt.Printf("    ✅ Custom filtering returned %d nutrients as expected\n", len(nutrients))
+	return nil
+}
+
+// testFixedDefaultNutrientsSearch tests the fixed default nutrients search tool
+func testFixedDefaultNutrientsSearch() error {
+	fmt.Printf("    Testing fixed default nutrients search (no customization allowed)...\n")
+
+	req := MCPRequest{
+		JSONRPC: "2.0",
+		ID:      1004,
+		Method:  "tools/call",
+		Params: CallToolParams{
+			Name: "search_foundation_foods_and_return_nutrients_simplified",
+			Arguments: map[string]interface{}{
+				"name":  "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D",
+				"limit": 1,
+				// Note: intentionally NOT providing nutrients_to_include - it should not be available
+			},
+		},
+	}
+
+	jsonData, _ := json.Marshal(req)
+	httpReq, _ := http.NewRequest("POST", serverURL+"/mcp", bytes.NewBuffer(jsonData))
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpReq.Header.Set("Authorization", "Bearer "+authToken)
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Do(httpReq)
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("expected status 200, got %d: %s", resp.StatusCode, string(body))
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read response: %w", err)
+	}
+
+	debugPrint("Fixed Default Nutrients Search Response", body)
+
+	// Parse the MCP response
+	var mcpResponse map[string]interface{}
+	if err := json.Unmarshal(body, &mcpResponse); err != nil {
+		return fmt.Errorf("failed to parse MCP response JSON: %w", err)
+	}
+
+	// Extract the tool result
+	result, ok := mcpResponse["result"].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("MCP response missing result field")
+	}
+
+	content, ok := result["content"].([]interface{})
+	if !ok || len(content) == 0 {
+		return fmt.Errorf("MCP response missing content field")
+	}
+
+	firstContent, ok := content[0].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("MCP response content[0] is not an object")
+	}
+
+	text, ok := firstContent["text"].(string)
+	if !ok {
+		return fmt.Errorf("MCP response content[0].text is not a string")
+	}
+
+	// Parse the simplified nutrient response
+	var nutrientResponse map[string]interface{}
+	if err := json.Unmarshal([]byte(text), &nutrientResponse); err != nil {
+		return fmt.Errorf("failed to parse nutrient response JSON: %w", err)
+	}
+
+	foods, ok := nutrientResponse["foods"].([]interface{})
+	if !ok || len(foods) == 0 {
+		return fmt.Errorf("no foods found in simplified nutrient response")
+	}
+
+	firstFood, ok := foods[0].(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("first food item is not a valid object")
+	}
+
+	nutrients, ok := firstFood["nutrients"].([]interface{})
+	if !ok {
+		return fmt.Errorf("nutrients not found in first food")
+	}
+
+	// Verify we have a reasonable number of default nutrients (should be around the number in DefaultNutrients)
+	if len(nutrients) < 25 {
+		return fmt.Errorf("expected at least 25 default nutrients, got %d", len(nutrients))
+	}
+
+	// Check for key nutrients that should be in the default set
+	expectedNutrients := []string{
+		"Energy", "Protein", "Total lipid (fat)", "Calcium, Ca", "Iron, Fe",
+	}
+
+	foundNutrients := make(map[string]bool)
+	for _, nutrient := range nutrients {
+		nutrientObj, ok := nutrient.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		name, ok := nutrientObj["name"].(string)
+		if !ok {
+			continue
+		}
+		foundNutrients[name] = true
+	}
+
+	// Check that we found most of our expected nutrients
+	foundCount := 0
+	missingNutrients := make([]string, 0)
+	for _, expected := range expectedNutrients {
+		if foundNutrients[expected] {
+			foundCount++
+		} else {
+			missingNutrients = append(missingNutrients, expected)
+		}
+	}
+
+	// We should find at least 80% of expected nutrients
+	minExpected := len(expectedNutrients) * 80 / 100
+	if foundCount < minExpected {
+		return fmt.Errorf("expected to find at least %d of %d key nutrients, got %d. Missing: %v",
+			minExpected, len(expectedNutrients), foundCount, missingNutrients)
+	}
+
+	// Verify Energy is only in kcal (not kJ)
+	energyFound := false
+	energyKjFound := false
+	for _, nutrient := range nutrients {
+		nutrientObj, ok := nutrient.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		name, ok := nutrientObj["name"].(string)
+		if !ok {
+			continue
+		}
+		if name == "Energy" {
+			energyFound = true
+			unitName, ok := nutrientObj["unitName"].(string)
+			if ok && strings.ToLower(unitName) == "kj" {
+				energyKjFound = true
+			}
+		}
+	}
+
+	if !energyFound {
+		return fmt.Errorf("Energy nutrient not found in fixed default search")
+	}
+
+	if energyKjFound {
+		return fmt.Errorf("Energy in kJ found - should be filtered out, only kcal should remain")
+	}
+
+	fmt.Printf("    ✅ Fixed default nutrients search returned %d nutrients (always uses defaults)\n", len(nutrients))
+	fmt.Printf("    ✅ Energy only present in kcal, kJ filtered out correctly\n")
+	fmt.Printf("    ✅ Found %d/%d key nutrients confirmed\n", foundCount, len(expectedNutrients))
+
 	return nil
 }
 
