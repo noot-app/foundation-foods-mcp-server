@@ -94,10 +94,10 @@ func (s *Server) addTools() {
 
 	// Simplified nutrients search tool
 	simplifiedTool := mcp.NewTool("search_foundation_foods_and_return_nutrients_simplified",
-		mcp.WithDescription("Search USDA foundation foods by name and return simplified nutrient information. Returns only essential nutrient data (name, amount, unit) for each food match."),
+		mcp.WithDescription("Search USDA foundation foods by name and return simplified nutrient information. Returns only essential nutrient data (name, amount, unit) for each food match. This tool is only meant to be used for generic product searches like 'milk', 'eggs', 'Cheese, cheddar', 'Broccoli, raw', etc."),
 		mcp.WithString("name",
 			mcp.Required(),
-			mcp.MinLength(1),
+			mcp.MinLength(1), // must be at least 1 char
 			mcp.Description("Food items/name to search for. Required and must be a non-empty string."),
 		),
 		mcp.WithNumber("limit",
