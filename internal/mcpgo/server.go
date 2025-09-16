@@ -91,6 +91,51 @@ func (s *Server) addTools() {
 	)
 
 	s.mcpServer.AddTool(searchTool, s.handleFoodSearch)
+
+	// Simplified nutrients search tool
+	simplifiedTool := mcp.NewTool("search_foundation_foods_and_return_nutrients",
+		mcp.WithDescription("Search USDA foundation foods by name and return simplified nutrient information. Returns only essential nutrient data (name, amount, unit) for each food match. This tool is only meant to be used for generic product searches like 'milk', 'eggs', 'Cheese, cheddar', 'Broccoli, raw', etc."),
+		mcp.WithString("name",
+			mcp.Required(),
+			mcp.MinLength(1), // must be at least 1 char
+			mcp.Description("Food items/name to search for. Required and must be a non-empty string."),
+		),
+		mcp.WithNumber("limit",
+			mcp.Description("Maximum number of results (default: 3, max: 10)"),
+			mcp.DefaultNumber(3),
+			mcp.Min(1),
+			mcp.Max(10),
+		),
+		mcp.WithArray("nutrients_to_include",
+			mcp.Description("Optional list of nutrient names to include in the response. If empty or not provided, a default set of essential nutrients will be included."),
+			mcp.Items([]string{}),
+			mcp.DefaultArray(query.DefaultNutrients),
+		),
+		mcp.WithOutputSchema[query.SimplifiedNutrientResponse](),
+		mcp.WithIdempotentHintAnnotation(true),
+	)
+
+	s.mcpServer.AddTool(simplifiedTool, s.handleSimplifiedFoodSearch)
+
+	// Fixed default nutrients search tool (no customization allowed)
+	simplifiedFixedTool := mcp.NewTool("search_foundation_foods_and_return_nutrients_simplified",
+		mcp.WithDescription("Search USDA foundation foods by name and return simplified nutrient information with a fixed set of default nutrients. Returns only essential nutrient data (name, amount, unit) for each food match using a predefined set of nutrients that cannot be customized. This tool is only meant to be used for generic product searches like 'milk', 'eggs', 'Cheese, cheddar', 'Broccoli, raw', etc."),
+		mcp.WithString("name",
+			mcp.Required(),
+			mcp.MinLength(1), // must be at least 1 char
+			mcp.Description("Food items/name to search for. Required and must be a non-empty string."),
+		),
+		mcp.WithNumber("limit",
+			mcp.Description("Maximum number of results (default: 3, max: 10)"),
+			mcp.DefaultNumber(3),
+			mcp.Min(1),
+			mcp.Max(10),
+		),
+		mcp.WithOutputSchema[query.SimplifiedNutrientResponse](),
+		mcp.WithIdempotentHintAnnotation(true),
+	)
+
+	s.mcpServer.AddTool(simplifiedFixedTool, s.handleSimplifiedFixedFoodSearch)
 }
 
 // ServeHTTP serves the MCP server over HTTP with authentication
@@ -227,6 +272,124 @@ func (s *Server) handleFoodSearch(ctx context.Context, request mcp.CallToolReque
 		"found", response.Found,
 		"count", response.Count,
 		"response_size", len(responseJSON))
+
+	// Return both structured content and text fallback for maximum compatibility
+	return mcp.NewToolResultStructured(response, string(responseJSON)), nil
+}
+
+func (s *Server) handleSimplifiedFoodSearch(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	s.log.Debug("handleSimplifiedFoodSearch: Starting tool call",
+		"arguments", request.GetArguments())
+
+	// Extract arguments
+	name, err := request.RequireString("name")
+	if err != nil {
+		s.log.Warn("handleSimplifiedFoodSearch: Missing 'name' parameter", "error", err)
+		return mcp.NewToolResultError(fmt.Sprintf("Missing required parameter 'name': %v", err)), nil
+	}
+
+	// Validate minimum lengths
+	if len(name) < 1 {
+		s.log.Warn("handleSimplifiedFoodSearch: Invalid 'name' parameter", "length", len(name))
+		return mcp.NewToolResultError("Parameter 'name' must be at least 1 character long"), nil
+	}
+
+	limitFloat := request.GetFloat("limit", 3.0)
+	limit := int(limitFloat)
+	if limit <= 0 {
+		limit = 3
+	}
+	if limit > 10 {
+		limit = 10
+	}
+
+	// Extract nutrients_to_include parameter
+	nutrientsToInclude := request.GetStringSlice("nutrients_to_include", query.DefaultNutrients)
+
+	s.log.Debug("MCP search_foundation_foods_and_return_nutrients called",
+		"name", name,
+		"limit", limit,
+		"nutrients_count", len(nutrientsToInclude))
+
+	// Execute simplified search
+	response, err := s.queryEngine.SearchFoodsByNameSimplified(ctx, name, limit, nutrientsToInclude)
+	if err != nil {
+		s.log.Error("Simplified food search failed", "error", err)
+		return mcp.NewToolResultError(fmt.Sprintf("Search failed: %v", err)), nil
+	}
+
+	// Create fallback text for backwards compatibility
+	responseJSON, err := json.MarshalIndent(response, "", "  ")
+	if err != nil {
+		s.log.Error("handleSimplifiedFoodSearch: Failed to marshal response", "error", err)
+		return mcp.NewToolResultError(fmt.Sprintf("Failed to marshal response: %v", err)), nil
+	}
+
+	s.log.Debug("handleSimplifiedFoodSearch: Returning structured result",
+		"found", response.Found,
+		"count", response.Count,
+		"foods_count", len(response.Foods),
+		"response_size", len(responseJSON))
+
+	// Return both structured content and text fallback for maximum compatibility
+	return mcp.NewToolResultStructured(response, string(responseJSON)), nil
+}
+
+func (s *Server) handleSimplifiedFixedFoodSearch(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	s.log.Debug("handleSimplifiedFixedFoodSearch: Starting tool call",
+		"arguments", request.GetArguments())
+
+	// Extract arguments
+	name, err := request.RequireString("name")
+	if err != nil {
+		s.log.Warn("handleSimplifiedFixedFoodSearch: Missing 'name' parameter", "error", err)
+		return mcp.NewToolResultError(fmt.Sprintf("Missing required parameter 'name': %v", err)), nil
+	}
+
+	// Validate minimum lengths
+	if len(name) < 1 {
+		s.log.Warn("handleSimplifiedFixedFoodSearch: Invalid 'name' parameter", "length", len(name))
+		return mcp.NewToolResultError("Parameter 'name' must be at least 1 character long"), nil
+	}
+
+	limitFloat := request.GetFloat("limit", 3.0)
+	limit := int(limitFloat)
+	if limit <= 0 {
+		limit = 3
+	}
+	if limit > 10 {
+		limit = 10
+	}
+
+	// Always use default nutrients - no customization allowed
+	nutrientsToInclude := query.DefaultNutrients
+
+	s.log.Debug("MCP search_foundation_foods_and_return_nutrients_simplified called",
+		"name", name,
+		"limit", limit,
+		"nutrients_count", len(nutrientsToInclude),
+		"fixed_nutrients", true)
+
+	// Execute simplified search with fixed default nutrients
+	response, err := s.queryEngine.SearchFoodsByNameSimplified(ctx, name, limit, nutrientsToInclude)
+	if err != nil {
+		s.log.Error("Simplified fixed food search failed", "error", err)
+		return mcp.NewToolResultError(fmt.Sprintf("Search failed: %v", err)), nil
+	}
+
+	// Create fallback text for backwards compatibility
+	responseJSON, err := json.MarshalIndent(response, "", "  ")
+	if err != nil {
+		s.log.Error("handleSimplifiedFixedFoodSearch: Failed to marshal response", "error", err)
+		return mcp.NewToolResultError(fmt.Sprintf("Failed to marshal response: %v", err)), nil
+	}
+
+	s.log.Debug("handleSimplifiedFixedFoodSearch: Returning structured result",
+		"found", response.Found,
+		"count", response.Count,
+		"foods_count", len(response.Foods),
+		"response_size", len(responseJSON),
+		"fixed_nutrients", true)
 
 	// Return both structured content and text fallback for maximum compatibility
 	return mcp.NewToolResultStructured(response, string(responseJSON)), nil

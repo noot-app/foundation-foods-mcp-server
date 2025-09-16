@@ -131,6 +131,70 @@ func (e *Engine) Health(ctx context.Context) error {
 	return nil
 }
 
+// SearchFoodsByNameSimplified searches for foods and returns simplified nutrient information
+func (e *Engine) SearchFoodsByNameSimplified(ctx context.Context, query string, limit int, nutrientsToInclude []string) (*SimplifiedNutrientResponse, error) {
+	// Use the existing search functionality
+	foods, err := e.SearchFoodsByName(ctx, query, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert to simplified format
+	simplifiedFoods := make([]SimplifiedFood, 0, len(foods))
+	for _, food := range foods {
+		simplifiedFood := SimplifiedFood{
+			Name:         food.Description,
+			Nutrients:    make([]SimplifiedNutrient, 0, len(food.FoodNutrients)),
+			FoodPortions: make([]SimplifiedFoodPortion, 0, len(food.FoodPortions)),
+		}
+
+		// Convert nutrients to simplified format with filtering
+		for _, nutrient := range food.FoodNutrients {
+			// Skip Energy in kJ - we only want kcal
+			if strings.ToLower(strings.TrimSpace(nutrient.Nutrient.Name)) == "energy" &&
+				strings.ToLower(strings.TrimSpace(nutrient.Nutrient.UnitName)) == "kj" {
+				continue
+			}
+
+			// Check if this nutrient should be included
+			if e.shouldIncludeNutrient(nutrient.Nutrient.Name, nutrientsToInclude) {
+				simplifiedNutrient := SimplifiedNutrient{
+					Name:       nutrient.Nutrient.Name,
+					UnitName:   nutrient.Nutrient.UnitName,
+					Amount:     nutrient.Amount,
+					DataPoints: nutrient.DataPoints,
+					Max:        nutrient.Max,
+					Min:        nutrient.Min,
+					Median:     nutrient.Median,
+				}
+				simplifiedFood.Nutrients = append(simplifiedFood.Nutrients, simplifiedNutrient)
+			}
+		}
+
+		// Convert food portions to simplified format
+		for _, portion := range food.FoodPortions {
+			simplifiedPortion := SimplifiedFoodPortion{
+				Value: portion.Value,
+				MeasureUnit: SimplifiedMeasureUnit{
+					Name:         portion.MeasureUnit.Name,
+					Abbreviation: portion.MeasureUnit.Abbreviation,
+				},
+				GramWeight: portion.GramWeight,
+				Amount:     portion.Amount,
+			}
+			simplifiedFood.FoodPortions = append(simplifiedFood.FoodPortions, simplifiedPortion)
+		}
+
+		simplifiedFoods = append(simplifiedFoods, simplifiedFood)
+	}
+
+	return &SimplifiedNutrientResponse{
+		Found: len(simplifiedFoods) > 0,
+		Count: len(simplifiedFoods),
+		Foods: simplifiedFoods,
+	}, nil
+}
+
 // normalizeString normalizes a string for better searching
 func normalizeString(s string) string {
 	// Convert to lowercase and trim whitespace
@@ -279,4 +343,59 @@ func adjustScoreForFoodContext(description, normalizedQuery string, queryWords [
 	}
 
 	return currentScore
+}
+
+// shouldIncludeNutrient checks if a nutrient should be included based on the filter list
+func (e *Engine) shouldIncludeNutrient(nutrientName string, nutrientsToInclude []string) bool {
+	// If no filter is specified, include all nutrients
+	if len(nutrientsToInclude) == 0 {
+		return true
+	}
+
+	normalizedNutrientName := strings.ToLower(strings.TrimSpace(nutrientName))
+
+	for _, includeName := range nutrientsToInclude {
+		normalizedIncludeName := strings.ToLower(strings.TrimSpace(includeName))
+
+		// Direct exact match
+		if normalizedNutrientName == normalizedIncludeName {
+			return true
+		}
+
+		// Enhanced matching for alternative names
+		if e.isAlternativeNutrientName(normalizedNutrientName, normalizedIncludeName) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// isAlternativeNutrientName checks if two nutrient names refer to the same nutrient
+func (e *Engine) isAlternativeNutrientName(dataName, filterName string) bool {
+	// Handle legacy fatty acid naming - check if filter name without PUFA prefix matches data name with PUFA prefix
+	if strings.HasPrefix(filterName, "pufa ") {
+		withoutPrefix := strings.TrimPrefix(filterName, "pufa ")
+		if dataName == withoutPrefix {
+			return true
+		}
+	}
+
+	// Handle reverse case - data has PUFA prefix but filter doesn't
+	if strings.HasPrefix(dataName, "pufa ") {
+		withoutPrefix := strings.TrimPrefix(dataName, "pufa ")
+		if filterName == withoutPrefix {
+			return true
+		}
+	}
+
+	// Note: Sugar variants are treated as separate nutrients - no alternative mapping
+
+	// Handle vitamin C variations
+	if (filterName == "vitamin c, total ascorbic acid" && dataName == "vitamin c") ||
+		(filterName == "vitamin c" && dataName == "vitamin c, total ascorbic acid") {
+		return true
+	}
+
+	return false
 }

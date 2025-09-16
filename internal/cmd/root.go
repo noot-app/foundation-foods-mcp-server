@@ -29,6 +29,8 @@ The server operates in three modes:
 
 Available MCP Tools:
 - search_foundation_foods_by_name: Search foundation foods by name
+- search_foundation_foods_and_return_nutrients: Search foods and return simplified nutrient info
+- search_foundation_foods_and_return_nutrients_simplified: Search foods and return simplified nutrient info fixed to the default nutrients
 
 Authentication (HTTP Mode Only):
 Bearer token authentication is required for all MCP endpoints except /health.
@@ -47,7 +49,6 @@ Use the FOUNDATIONFOODS_MCP_TOKEN environment variable to set the token.`,
 
 func init() {
 	rootCmd.Flags().Bool("stdio", false, "Run in stdio mode for local Claude Desktop integration (default: HTTP mode for remote deployment)")
-	rootCmd.Flags().Bool("fetch-db", false, "Fetch the database and exit (useful for downloading the dataset without starting the server)")
 }
 
 // runStdioMode runs the MCP server in stdio mode for Claude Desktop

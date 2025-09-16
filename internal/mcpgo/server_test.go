@@ -45,6 +45,11 @@ func (t *testQueryEngine) SearchFoodsByName(ctx context.Context, query string, l
 	return t.data.FoundationFoods, nil
 }
 
+func (t *testQueryEngine) SearchFoodsByNameSimplified(ctx context.Context, query string, limit int, nutrientsToInclude []string) (*query.SimplifiedNutrientResponse, error) {
+	// Return nil for now to avoid type errors during development
+	return nil, nil
+}
+
 func (t *testQueryEngine) GetFoodByFdcId(ctx context.Context, fdcId int) (*query.FoundationFood, error) {
 	for _, food := range t.data.FoundationFoods {
 		if food.FdcId == fdcId {

@@ -1,0 +1,490 @@
+# Complete USDA Foundation Foods Nutrient Analysis
+# Generated from scanning the entire dataset
+# Total unique nutrients found: 227
+# Total foods analyzed: 65
+
+## All Nutrients (sorted by frequency)
+Format: Nutrient Name | Frequency | Example Foods
+================================================================================
+
+Water | 332 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Protein | 329 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Iron, Fe | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Magnesium, Mg | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Phosphorus, P | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Copper, Cu | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Manganese, Mn | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Calcium, Ca | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Potassium, K | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Zinc, Zn | 328 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Total lipid (fat) | 318 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Ash | 313 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Sodium, Na | 310 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Nitrogen | 303 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Carbohydrate, by difference | 299 foods | Hummus, commercial | Tomatoes, grape, raw | Beans, snap, green, canned, regular pack, drained solids
+Energy (Atwater General Factors) | 202 foods | Apples, red delicious, with skin, raw | Apples, fuji, with skin, raw | Apples, gala, with skin, raw
+Energy (Atwater Specific Factors) | 199 foods | Apples, red delicious, with skin, raw | Apples, fuji, with skin, raw | Apples, gala, with skin, raw
+Energy | 194 foods | Hummus, commercial | Hummus, commercial | Tomatoes, grape, raw
+Vitamin B-6 | 192 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Niacin | 176 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Thiamin | 170 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Fiber, total dietary | 166 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Selenium, Se | 141 foods | Hummus, commercial | Nuts, almonds, dry roasted, with salt added | Onion rings, breaded, par fried, frozen, prepared, heated in oven
+Riboflavin | 133 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Fructose | 129 foods | Hummus, commercial | Beans, snap, green, canned, regular pack, drained solids | Frankfurter, beef, unheated
+Lactose | 129 foods | Hummus, commercial | Beans, snap, green, canned, regular pack, drained solids | Frankfurter, beef, unheated
+Sucrose | 129 foods | Hummus, commercial | Beans, snap, green, canned, regular pack, drained solids | Frankfurter, beef, unheated
+Glucose | 129 foods | Hummus, commercial | Beans, snap, green, canned, regular pack, drained solids | Frankfurter, beef, unheated
+Maltose | 129 foods | Hummus, commercial | Beans, snap, green, canned, regular pack, drained solids | Frankfurter, beef, unheated
+Sugars, Total | 126 foods | Hummus, commercial | Beans, snap, green, canned, regular pack, drained solids | Frankfurter, beef, unheated
+Folate, total | 112 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Fatty acids, total saturated | 107 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Fatty acids, total monounsaturated | 107 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Biotin | 100 foods | Eggs, Grade A, Large, egg yolk | Butter, stick, salted | Onions, red, raw
+Vitamin C, total ascorbic acid | 99 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Fatty acids, total polyunsaturated | 92 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Starch | 91 foods | Hummus, commercial | Onion rings, breaded, par fried, frozen, prepared, heated in oven | Peaches, yellow, raw
+SFA 16:0 | 89 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 18:0 | 89 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Cholesterol | 88 foods | Egg, whole, raw, frozen, pasteurized | Egg, white, raw, frozen, pasteurized | Egg, white, dried
+SFA 14:0 | 85 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 12:0 | 80 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 18:2 n-6 c,c | 80 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Galactose | 80 foods | Hummus, commercial | Beans, snap, green, canned, regular pack, drained solids | Frankfurter, beef, unheated
+MUFA 18:1 c | 78 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Vitamin K (phylloquinone) | 75 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Fatty acids, total trans | 69 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 18:3 n-3 c,c,c (ALA) | 68 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+MUFA 16:1 c | 68 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Molybdenum, Mo | 68 foods | Beans, Dry, Medium Red (0% moisture) | Beans, Dry, Red (0% moisture) | Beans, Dry, Flor de Mayo (0% moisture)
+SFA 10:0 | 67 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+MUFA 20:1 c | 67 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 20:0 | 66 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Vitamin K (Dihydrophylloquinone) | 65 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+PUFA 18:2 c | 65 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 18:3 c | 65 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Total fat (NLEA) | 65 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 22:6 n-3 (DHA) | 64 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:5 n-3 (EPA) | 64 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 17:0 | 64 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 24:0 | 64 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 15:0 | 64 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Vitamin E (alpha-tocopherol) | 64 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+PUFA 22:5 n-3 (DPA) | 63 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:3 c | 63 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:3 n-6 | 62 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Tocopherol, delta | 60 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+SFA 8:0 | 60 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:4 | 60 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 4:0 | 60 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 6:0 | 60 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Tocopherol, beta | 60 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Tocopherol, gamma | 60 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Vitamin K (Menaquinone-4) | 60 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+MUFA 14:1 c | 60 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:4c | 60 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Tocotrienol, gamma | 59 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Tocotrienol, delta | 59 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+SFA 22:0 | 59 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Tocotrienol, alpha | 59 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+Tocotrienol, beta | 59 foods | Hummus, commercial | Tomatoes, grape, raw | Frankfurter, beef, unheated
+PUFA 20:5c | 59 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 22:6 c | 59 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+MUFA 17:1 | 58 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:2 n-6 c,c | 58 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+MUFA 17:1 c | 58 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 22:5 c | 58 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:2 c | 58 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 18:2 CLAs | 57 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+TFA 16:1 t | 56 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Fatty acids, total trans-monoenoic | 56 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+TFA 18:1 t | 56 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+TFA 18:2 t not further defined | 56 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Pantothenic acid | 54 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+MUFA 22:1 c | 53 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 18:4 | 53 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 18:3 n-6 c,c,c | 53 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Retinol | 53 foods | Frankfurter, beef, unheated | Cheese, parmesan, grated | Cheese, pasteurized process, American, vitamin D fortified
+Tryptophan | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Threonine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Methionine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Phenylalanine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Isoleucine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Leucine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Lysine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Valine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Histidine | 53 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+MUFA 15:1 | 52 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 22:2 | 52 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Vitamin D (D2 + D3) | 52 foods | Egg, whole, raw, frozen, pasteurized | Egg, white, raw, frozen, pasteurized | Egg, white, dried
+Vitamin D (D2 + D3), International Units | 52 foods | Egg, whole, raw, frozen, pasteurized | Egg, white, raw, frozen, pasteurized | Egg, white, dried
+MUFA 24:1 c | 51 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 20:3 n-3 | 51 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+PUFA 22:4 | 51 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Vitamin A, RAE | 51 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+SFA 11:0 | 51 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Vitamin B-12 | 51 foods | Frankfurter, beef, unheated | Cheese, parmesan, grated | Cheese, pasteurized process, American, vitamin D fortified
+TFA 22:1 t | 50 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Fatty acids, total trans-dienoic | 50 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Vitamin D2 (ergocalciferol) | 47 foods | Egg, whole, raw, frozen, pasteurized | Egg, white, raw, frozen, pasteurized | Egg, white, dried
+Iodine, I | 46 foods | Egg, whole, raw, frozen, pasteurized | Egg, white, raw, frozen, pasteurized | Egg, white, dried
+Tyrosine | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Alanine | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Glutamic acid | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Glycine | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Proline | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Arginine | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Aspartic acid | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Serine | 42 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Vitamin D3 (cholecalciferol) | 41 foods | Egg, whole, raw, frozen, pasteurized | Egg, white, raw, frozen, pasteurized | Egg, white, dried
+PUFA 20:3 n-9 | 40 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Cryptoxanthin, beta | 38 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Carotene, alpha | 38 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Carotene, beta | 37 foods | Hummus, commercial | Nuts, almonds, dry roasted, with salt added | Kale, raw
+Lycopene | 36 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+MUFA 20:1 | 34 foods | Onion rings, breaded, par fried, frozen, prepared, heated in oven | Cheese, parmesan, grated | Cheese, pasteurized process, American, vitamin D fortified
+Total dietary fiber (AOAC 2011.25) | 34 foods | Onions, red, raw | Onions, yellow, raw | Flour, soy, defatted
+Carbohydrate, by summation | 32 foods | Hummus, commercial | Onion rings, breaded, par fried, frozen, prepared, heated in oven | Peaches, yellow, raw
+Lutein + zeaxanthin | 29 foods | Hummus, commercial | Nuts, almonds, dry roasted, with salt added | Kale, raw
+MUFA 22:1 n-9 | 28 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Choline, total | 28 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Choline, from glycerophosphocholine | 28 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Betaine | 28 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Choline, from sphingomyelin | 28 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Choline, free | 28 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Choline, from phosphotidyl choline | 28 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Choline, from phosphocholine | 28 foods | Hummus, commercial | Tomatoes, grape, raw | Nuts, almonds, dry roasted, with salt added
+Vitamin A | 27 foods | Tomatoes, grape, raw | Soy milk, sweetened, plain, refrigerated | Almond milk, unsweetened, plain, refrigerated
+Hydroxyproline | 27 foods | Mustard, prepared, yellow | Yogurt, Greek, plain, nonfat | Cheese, ricotta, whole milk
+Fatty acids, total trans-polyenoic | 26 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+TFA 18:3 t | 26 foods | Hummus, commercial | Frankfurter, beef, unheated | Nuts, almonds, dry roasted, with salt added
+Cysteine | 25 foods | Cheese, ricotta, whole milk | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+Beta-glucan | 23 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+SFA 21:0 | 19 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+Beta-sitosterol | 19 foods | Oil, canola | Oil, corn | Oil, soybean
+Campesterol | 19 foods | Oil, canola | Oil, corn | Oil, soybean
+Delta-5-avenasterol | 19 foods | Oil, canola | Oil, corn | Oil, soybean
+Beta-sitostanol | 19 foods | Oil, canola | Oil, corn | Oil, soybean
+Stigmasterol | 19 foods | Oil, canola | Oil, corn | Oil, soybean
+Low Molecular Weight Dietary Fiber (LMWDF) | 19 foods | Flour, oat, whole grain | Flour, potato | Oats, whole grain, rolled, old fashioned
+High Molecular Weight Dietary Fiber (HMWDF) | 19 foods | Flour, oat, whole grain | Flour, potato | Oats, whole grain, rolled, old fashioned
+Cystine | 17 foods | Peaches, yellow, raw | Mustard, prepared, yellow | Kiwifruit, green, raw
+Boron, B | 17 foods | Beans, Dry, Medium Red (0% moisture) | Beans, Dry, Red (0% moisture) | Beans, Dry, Flor de Mayo (0% moisture)
+Cobalt, Co | 17 foods | Beans, Dry, Medium Red (0% moisture) | Beans, Dry, Red (0% moisture) | Beans, Dry, Flor de Mayo (0% moisture)
+Nickel, Ni | 17 foods | Beans, Dry, Medium Red (0% moisture) | Beans, Dry, Red (0% moisture) | Beans, Dry, Flor de Mayo (0% moisture)
+Sulfur, S | 17 foods | Beans, Dry, Medium Red (0% moisture) | Beans, Dry, Red (0% moisture) | Beans, Dry, Flor de Mayo (0% moisture)
+Resistant starch | 17 foods | Beans, cannellini, dry | Chickpeas, (garbanzo beans, bengal gram), dry | Lentils, dry
+25-hydroxycholecalciferol | 15 foods | Egg, whole, raw, frozen, pasteurized | Egg, white, raw, frozen, pasteurized | Egg, white, dried
+SFA 5:0 | 15 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+SFA 7:0 | 15 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+SFA 9:0 | 15 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+MUFA 12:1 | 15 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+MUFA 22:1 n-11 | 15 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+SFA 23:0 | 15 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+PUFA 22:3 | 15 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+Citric acid | 15 foods | Bananas, overripe, raw | Bananas, ripe and slightly ripe, raw | Apple juice, with added vitamin C, from concentrate, shelf stable
+Malic acid | 15 foods | Bananas, overripe, raw | Bananas, ripe and slightly ripe, raw | Apple juice, with added vitamin C, from concentrate, shelf stable
+Delta-7-Stigmastenol | 15 foods | Oil, peanut | Oil, sunflower | Oil, safflower
+cis-Lutein/Zeaxanthin | 14 foods | Tomatoes, grape, raw | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+PUFA 18:3i | 14 foods | Onion rings, breaded, par fried, frozen, prepared, heated in oven | Cheese, parmesan, grated | Mustard, prepared, yellow
+TFA 14:1 t | 14 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+TFA 20:1 t | 14 foods | Fish, tuna, light, canned in water, drained solids | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+Cryptoxanthin, alpha | 13 foods | Tomatoes, grape, raw | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+Oxalic acid | 13 foods | Apple juice, with added vitamin C, from concentrate, shelf stable | Orange juice, no pulp, not fortified, from concentrate, refrigerated | Grape juice, purple, with added vitamin C, from concentrate, shelf stable
+Quinic acid | 13 foods | Apple juice, with added vitamin C, from concentrate, shelf stable | Orange juice, no pulp, not fortified, from concentrate, refrigerated | Grape juice, purple, with added vitamin C, from concentrate, shelf stable
+Zeaxanthin | 12 foods | Tomatoes, grape, raw | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+trans-beta-Carotene | 11 foods | Tomatoes, grape, raw | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+cis-beta-Carotene | 11 foods | Tomatoes, grape, raw | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+cis-Lycopene | 11 foods | Tomatoes, grape, raw | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+Lutein | 11 foods | Tomatoes, grape, raw | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)
+5-methyl tetrahydrofolate (5-MTHF) | 11 foods | Lettuce, cos or romaine, raw | Squash, summer, green, zucchini, includes skin, raw | Squash, summer, yellow, includes skin, raw
+Ergosterol | 11 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+Ergothioneine | 11 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+Vitamin D4 | 11 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+Ergosta-7-enol | 11 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+Ergosta-7,22-dienol | 11 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+Ergosta-5,7-dienol | 11 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+Glutathione | 11 foods | Mushroom, lion's mane | Mushroom, oyster | Mushrooms, shiitake
+Fiber, insoluble | 10 foods | Peaches, yellow, raw | Kiwifruit, green, raw | Nectarines, raw
+Fiber, soluble | 10 foods | Peaches, yellow, raw | Kiwifruit, green, raw | Nectarines, raw
+trans-Lycopene | 10 foods | Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D | Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim) | Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D
+PUFA 18:2 | 9 foods | Nectarines, raw | Carrots, frozen, unprepared | Broccoli, raw
+Brassicasterol | 8 foods | Oil, canola | Oil, corn | Oil, soybean
+Campestanol | 8 foods | Oil, canola | Oil, corn | Oil, soybean
+TFA 18:2 t | 6 foods | Oil, peanut | Oil, sunflower | Oil, safflower
+Daidzin | 6 foods | Soy milk, unsweetened, plain, shelf stable | Soy milk, sweetened, plain, refrigerated | Peanut butter, creamy
+Genistin | 6 foods | Soy milk, unsweetened, plain, shelf stable | Soy milk, sweetened, plain, refrigerated | Peanut butter, creamy
+Glycitin | 6 foods | Soy milk, unsweetened, plain, shelf stable | Soy milk, sweetened, plain, refrigerated | Peanut butter, creamy
+Daidzein | 6 foods | Soy milk, unsweetened, plain, shelf stable | Soy milk, sweetened, plain, refrigerated | Peanut butter, creamy
+Genistein | 6 foods | Soy milk, unsweetened, plain, shelf stable | Soy milk, sweetened, plain, refrigerated | Peanut butter, creamy
+Total Sugars | 5 foods | Apples, red delicious, with skin, raw | Apples, fuji, with skin, raw | Apples, gala, with skin, raw
+Pyruvic acid | 5 foods | Pineapple, raw | Cherries, sweet, dark red, raw | Strawberries, raw
+Phytosterols, other | 4 foods | Oil, canola | Oil, corn | Oil, soybean
+Stigmastadiene | 4 foods | Oil, peanut | Oil, sunflower | Oil, safflower
+Carotene, gamma | 4 foods | Soy milk, unsweetened, plain, shelf stable | Spinach, baby | Spinach, mature
+MUFA 18:1 | 3 foods | Nectarines, raw | Carrots, frozen, unprepared | Broccoli, raw
+PUFA 18:3 | 3 foods | Nectarines, raw | Carrots, frozen, unprepared | Broccoli, raw
+MUFA 22:1 | 2 foods | Nectarines, raw | Carrots, frozen, unprepared
+Phytofluene | 2 foods | Lettuce, cos or romaine, raw | Broccoli, raw
+Phytoene | 2 foods | Lettuce, cos or romaine, raw | Broccoli, raw
+Verbascose | 2 foods | Soy milk, unsweetened, plain, shelf stable | Almond milk, unsweetened, plain, shelf stable
+Raffinose | 2 foods | Soy milk, unsweetened, plain, shelf stable | Almond milk, unsweetened, plain, shelf stable
+Stachyose | 2 foods | Soy milk, unsweetened, plain, shelf stable | Almond milk, unsweetened, plain, shelf stable
+Specific Gravity | 1 foods | Grapefruit juice, white, canned or bottled, unsweetened
+10-Formyl folic acid (10HCOFA) | 1 foods | Lettuce, cos or romaine, raw
+5-Formyltetrahydrofolic acid (5-HCOH4 | 1 foods | Lettuce, cos or romaine, raw
+PUFA 20:3 | 1 foods | Broccoli, raw
+
+
+## Summary Statistics
+- Total unique nutrients: 227
+- Most common nutrient: Water (332 foods)
+- Least common nutrients: 4 nutrients appear in only 1 food
+
+
+## Nutrient Categories (for analysis)
+
+### Energy (3 nutrients)
+- Energy (Atwater General Factors) (202 foods)
+- Energy (Atwater Specific Factors) (199 foods)
+- Energy (194 foods)
+
+### Protein (2 nutrients)
+- Protein (329 foods)
+- Nitrogen (303 foods)
+
+### Fats (3 nutrients)
+- Total lipid (fat) (318 foods)
+- Cholesterol (88 foods)
+- Total fat (NLEA) (65 foods)
+
+### Carbs (12 nutrients)
+- Carbohydrate, by difference (299 foods)
+- Fiber, total dietary (166 foods)
+- Sugars, Total (126 foods)
+- Starch (91 foods)
+- Total dietary fiber (AOAC 2011.25) (34 foods)
+- Carbohydrate, by summation (32 foods)
+- Low Molecular Weight Dietary Fiber (LMWDF) (19 foods)
+- High Molecular Weight Dietary Fiber (HMWDF) (19 foods)
+- Resistant starch (17 foods)
+- Fiber, insoluble (10 foods)
+- Fiber, soluble (10 foods)
+- Total Sugars (5 foods)
+
+### Vitamins (27 nutrients)
+- Vitamin B-6 (192 foods)
+- Niacin (176 foods)
+- Thiamin (170 foods)
+- Riboflavin (133 foods)
+- Folate, total (112 foods)
+- Biotin (100 foods)
+- Vitamin C, total ascorbic acid (99 foods)
+- Vitamin K (phylloquinone) (75 foods)
+- Vitamin K (Dihydrophylloquinone) (65 foods)
+- Vitamin E (alpha-tocopherol) (64 foods)
+- Vitamin K (Menaquinone-4) (60 foods)
+- Pantothenic acid (54 foods)
+- Vitamin D (D2 + D3) (52 foods)
+- Vitamin D (D2 + D3), International Units (52 foods)
+- Vitamin A, RAE (51 foods)
+- Vitamin B-12 (51 foods)
+- Vitamin D2 (ergocalciferol) (47 foods)
+- Vitamin D3 (cholecalciferol) (41 foods)
+- Choline, total (28 foods)
+- Choline, from glycerophosphocholine (28 foods)
+- Choline, from sphingomyelin (28 foods)
+- Choline, free (28 foods)
+- Choline, from phosphotidyl choline (28 foods)
+- Choline, from phosphocholine (28 foods)
+- Vitamin A (27 foods)
+- 5-methyl tetrahydrofolate (5-MTHF) (11 foods)
+- Vitamin D4 (11 foods)
+
+### Minerals (12 nutrients)
+- Iron, Fe (328 foods)
+- Magnesium, Mg (328 foods)
+- Phosphorus, P (328 foods)
+- Copper, Cu (328 foods)
+- Manganese, Mn (328 foods)
+- Calcium, Ca (328 foods)
+- Potassium, K (328 foods)
+- Zinc, Zn (328 foods)
+- Sodium, Na (310 foods)
+- Selenium, Se (141 foods)
+- Molybdenum, Mo (68 foods)
+- Iodine, I (46 foods)
+
+### Fatty Acids (7 nutrients)
+- Fatty acids, total saturated (107 foods)
+- Fatty acids, total monounsaturated (107 foods)
+- Fatty acids, total polyunsaturated (92 foods)
+- Fatty acids, total trans (69 foods)
+- Fatty acids, total trans-monoenoic (56 foods)
+- Fatty acids, total trans-dienoic (50 foods)
+- Fatty acids, total trans-polyenoic (26 foods)
+
+### Amino Acids (19 nutrients)
+- Tryptophan (53 foods)
+- Threonine (53 foods)
+- Methionine (53 foods)
+- Phenylalanine (53 foods)
+- Isoleucine (53 foods)
+- Leucine (53 foods)
+- Lysine (53 foods)
+- Valine (53 foods)
+- Histidine (53 foods)
+- Tyrosine (42 foods)
+- Alanine (42 foods)
+- Glutamic acid (42 foods)
+- Glycine (42 foods)
+- Proline (42 foods)
+- Arginine (42 foods)
+- Aspartic acid (42 foods)
+- Serine (42 foods)
+- Hydroxyproline (27 foods)
+- Cystine (17 foods)
+
+### Other (142 nutrients)
+- Water (332 foods)
+- Ash (313 foods)
+- Fructose (129 foods)
+- Lactose (129 foods)
+- Sucrose (129 foods)
+- Glucose (129 foods)
+- Maltose (129 foods)
+- SFA 16:0 (89 foods)
+- SFA 18:0 (89 foods)
+- SFA 14:0 (85 foods)
+- SFA 12:0 (80 foods)
+- PUFA 18:2 n-6 c,c (80 foods)
+- Galactose (80 foods)
+- MUFA 18:1 c (78 foods)
+- PUFA 18:3 n-3 c,c,c (ALA) (68 foods)
+- MUFA 16:1 c (68 foods)
+- SFA 10:0 (67 foods)
+- MUFA 20:1 c (67 foods)
+- SFA 20:0 (66 foods)
+- PUFA 18:2 c (65 foods)
+- PUFA 18:3 c (65 foods)
+- PUFA 22:6 n-3 (DHA) (64 foods)
+- PUFA 20:5 n-3 (EPA) (64 foods)
+- SFA 17:0 (64 foods)
+- SFA 24:0 (64 foods)
+- SFA 15:0 (64 foods)
+- PUFA 22:5 n-3 (DPA) (63 foods)
+- PUFA 20:3 c (63 foods)
+- PUFA 20:3 n-6 (62 foods)
+- Tocopherol, delta (60 foods)
+- SFA 8:0 (60 foods)
+- PUFA 20:4 (60 foods)
+- SFA 4:0 (60 foods)
+- SFA 6:0 (60 foods)
+- Tocopherol, beta (60 foods)
+- Tocopherol, gamma (60 foods)
+- MUFA 14:1 c (60 foods)
+- PUFA 20:4c (60 foods)
+- Tocotrienol, gamma (59 foods)
+- Tocotrienol, delta (59 foods)
+- SFA 22:0 (59 foods)
+- Tocotrienol, alpha (59 foods)
+- Tocotrienol, beta (59 foods)
+- PUFA 20:5c (59 foods)
+- PUFA 22:6 c (59 foods)
+- MUFA 17:1 (58 foods)
+- PUFA 20:2 n-6 c,c (58 foods)
+- MUFA 17:1 c (58 foods)
+- PUFA 22:5 c (58 foods)
+- PUFA 20:2 c (58 foods)
+- PUFA 18:2 CLAs (57 foods)
+- TFA 16:1 t (56 foods)
+- TFA 18:1 t (56 foods)
+- TFA 18:2 t not further defined (56 foods)
+- MUFA 22:1 c (53 foods)
+- PUFA 18:4 (53 foods)
+- PUFA 18:3 n-6 c,c,c (53 foods)
+- Retinol (53 foods)
+- MUFA 15:1 (52 foods)
+- PUFA 22:2 (52 foods)
+- MUFA 24:1 c (51 foods)
+- PUFA 20:3 n-3 (51 foods)
+- PUFA 22:4 (51 foods)
+- SFA 11:0 (51 foods)
+- TFA 22:1 t (50 foods)
+- PUFA 20:3 n-9 (40 foods)
+- Cryptoxanthin, beta (38 foods)
+- Carotene, alpha (38 foods)
+- Carotene, beta (37 foods)
+- Lycopene (36 foods)
+- MUFA 20:1 (34 foods)
+- Lutein + zeaxanthin (29 foods)
+- MUFA 22:1 n-9 (28 foods)
+- Betaine (28 foods)
+- TFA 18:3 t (26 foods)
+- Cysteine (25 foods)
+- Beta-glucan (23 foods)
+- SFA 21:0 (19 foods)
+- Beta-sitosterol (19 foods)
+- Campesterol (19 foods)
+- Delta-5-avenasterol (19 foods)
+- Beta-sitostanol (19 foods)
+- Stigmasterol (19 foods)
+- Boron, B (17 foods)
+- Cobalt, Co (17 foods)
+- Nickel, Ni (17 foods)
+- Sulfur, S (17 foods)
+- 25-hydroxycholecalciferol (15 foods)
+- SFA 5:0 (15 foods)
+- SFA 7:0 (15 foods)
+- SFA 9:0 (15 foods)
+- MUFA 12:1 (15 foods)
+- MUFA 22:1 n-11 (15 foods)
+- SFA 23:0 (15 foods)
+- PUFA 22:3 (15 foods)
+- Citric acid (15 foods)
+- Malic acid (15 foods)
+- Delta-7-Stigmastenol (15 foods)
+- cis-Lutein/Zeaxanthin (14 foods)
+- PUFA 18:3i (14 foods)
+- TFA 14:1 t (14 foods)
+- TFA 20:1 t (14 foods)
+- Cryptoxanthin, alpha (13 foods)
+- Oxalic acid (13 foods)
+- Quinic acid (13 foods)
+- Zeaxanthin (12 foods)
+- trans-beta-Carotene (11 foods)
+- cis-beta-Carotene (11 foods)
+- cis-Lycopene (11 foods)
+- Lutein (11 foods)
+- Ergosterol (11 foods)
+- Ergothioneine (11 foods)
+- Ergosta-7-enol (11 foods)
+- Ergosta-7,22-dienol (11 foods)
+- Ergosta-5,7-dienol (11 foods)
+- Glutathione (11 foods)
+- trans-Lycopene (10 foods)
+- PUFA 18:2 (9 foods)
+- Brassicasterol (8 foods)
+- Campestanol (8 foods)
+- TFA 18:2 t (6 foods)
+- Daidzin (6 foods)
+- Genistin (6 foods)
+- Glycitin (6 foods)
+- Daidzein (6 foods)
+- Genistein (6 foods)
+- Pyruvic acid (5 foods)
+- Phytosterols, other (4 foods)
+- Stigmastadiene (4 foods)
+- Carotene, gamma (4 foods)
+- MUFA 18:1 (3 foods)
+- PUFA 18:3 (3 foods)
+- MUFA 22:1 (2 foods)
+- Phytofluene (2 foods)
+- Phytoene (2 foods)
+- Verbascose (2 foods)
+- Raffinose (2 foods)
+- Stachyose (2 foods)
+- Specific Gravity (1 foods)
+- 10-Formyl folic acid (10HCOFA) (1 foods)
+- 5-Formyltetrahydrofolic acid (5-HCOH4 (1 foods)
+- PUFA 20:3 (1 foods)

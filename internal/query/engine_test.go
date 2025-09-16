@@ -3,6 +3,7 @@ package query
 import (
 	"context"
 	"io"
+	"log/slog"
 	"strings"
 	"testing"
 
@@ -273,4 +274,132 @@ func TestNormalizeString(t *testing.T) {
 			assert.Equal(t, tc.expected, result)
 		})
 	}
+}
+
+func TestEngine_shouldIncludeNutrient(t *testing.T) {
+	logger := config.NewTestLogger(io.Discard, "debug")
+	engine := &Engine{logger: logger}
+
+	testCases := []struct {
+		name               string
+		nutrientName       string
+		nutrientsToInclude []string
+		expected           bool
+	}{
+		{
+			name:               "include when empty filter list",
+			nutrientName:       "Protein",
+			nutrientsToInclude: []string{},
+			expected:           true,
+		},
+		{
+			name:               "include when nutrient in filter list",
+			nutrientName:       "Protein",
+			nutrientsToInclude: []string{"Energy", "Protein", "Total lipid (fat)"},
+			expected:           true,
+		},
+		{
+			name:               "exclude when nutrient not in filter list",
+			nutrientName:       "Ash",
+			nutrientsToInclude: []string{"Energy", "Protein", "Total lipid (fat)"},
+			expected:           false,
+		},
+		{
+			name:               "case insensitive matching",
+			nutrientName:       "protein",
+			nutrientsToInclude: []string{"Energy", "PROTEIN", "Total lipid (fat)"},
+			expected:           true,
+		},
+		{
+			name:               "handle whitespace",
+			nutrientName:       " Protein ",
+			nutrientsToInclude: []string{"Energy", "Protein", "Total lipid (fat)"},
+			expected:           true,
+		},
+		{
+			name:               "complex nutrient name matching",
+			nutrientName:       "Fatty acids, total saturated",
+			nutrientsToInclude: []string{"Energy", "Fatty acids, total saturated", "Protein"},
+			expected:           true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := engine.shouldIncludeNutrient(tc.nutrientName, tc.nutrientsToInclude)
+			assert.Equal(t, tc.expected, result)
+		})
+	}
+}
+
+// TestEngine_SearchFoodsByNameSimplified_FiltersKilojouleEnergy tests that kJ Energy values are filtered out
+func TestEngine_SearchFoodsByNameSimplified_FiltersKilojouleEnergy(t *testing.T) {
+	// Create mock data with both kcal and kJ energy nutrients
+	mockData := &FoundationFoodsData{
+		FoundationFoods: []FoundationFood{
+			{
+				Description: "Test Food",
+				FdcId:       123,
+				FoodNutrients: []FoodNutrient{
+					{
+						Nutrient: Nutrient{
+							Name:     "Energy",
+							UnitName: "kcal",
+						},
+						Amount: 100,
+					},
+					{
+						Nutrient: Nutrient{
+							Name:     "Energy",
+							UnitName: "kJ",
+						},
+						Amount: 418,
+					},
+					{
+						Nutrient: Nutrient{
+							Name:     "Protein",
+							UnitName: "g",
+						},
+						Amount: 20,
+					},
+				},
+			},
+		},
+	}
+
+	engine := &Engine{
+		data:   mockData,
+		logger: slog.Default(),
+	}
+
+	ctx := context.Background()
+
+	// Search with custom nutrient filtering that includes Energy
+	result, err := engine.SearchFoodsByNameSimplified(ctx, "Test", 10, []string{"Energy", "Protein"})
+
+	assert.NoError(t, err)
+	assert.Len(t, result.Foods, 1)
+
+	food := result.Foods[0]
+	assert.Len(t, food.Nutrients, 2) // Should have exactly 2 nutrients (Energy in kcal + Protein)
+
+	// Verify we only get Energy in kcal, not kJ
+	energyFound := false
+	kilojouleFound := false
+
+	for _, nutrient := range food.Nutrients {
+		if nutrient.Name == "Energy" {
+			energyFound = true
+			// Should be kcal, not kJ
+			assert.Equal(t, "kcal", nutrient.UnitName, "Energy should only be in kcal units")
+			assert.Equal(t, 100.0, nutrient.Amount, "Energy amount should match kcal value")
+
+			if nutrient.UnitName == "kJ" {
+				kilojouleFound = true
+			}
+		}
+	}
+
+	assert.True(t, energyFound, "Energy nutrient should be present")
+	assert.False(t, kilojouleFound, "Energy in kJ should be filtered out")
 }

@@ -122,9 +122,151 @@ type QueryEngine interface {
 	// SearchFoodsByName searches for foods by their description/name
 	SearchFoodsByName(ctx context.Context, query string, limit int) ([]FoundationFood, error)
 
+	// SearchFoodsByNameSimplified searches for foods and returns simplified nutrient information
+	SearchFoodsByNameSimplified(ctx context.Context, query string, limit int, nutrientsToInclude []string) (*SimplifiedNutrientResponse, error)
+
 	// GetFoodByFdcId retrieves a specific food by its FDC ID
 	GetFoodByFdcId(ctx context.Context, fdcId int) (*FoundationFood, error)
 
 	// Health checks if the query engine is ready and operational
 	Health(ctx context.Context) error
+}
+
+// SimplifiedNutrient represents a nutrient with only essential information
+type SimplifiedNutrient struct {
+	Name       string  `json:"name"`
+	UnitName   string  `json:"unitName"`
+	Amount     float64 `json:"amount"`
+	DataPoints int     `json:"dataPoints,omitempty"`
+	Max        float64 `json:"max,omitempty"`
+	Min        float64 `json:"min,omitempty"`
+	Median     float64 `json:"median,omitempty"`
+}
+
+// SimplifiedMeasureUnit represents a simplified measure unit
+type SimplifiedMeasureUnit struct {
+	Name         string `json:"name"`
+	Abbreviation string `json:"abbreviation"`
+}
+
+// SimplifiedFoodPortion represents a simplified food portion
+type SimplifiedFoodPortion struct {
+	Value       float64               `json:"value"`
+	MeasureUnit SimplifiedMeasureUnit `json:"measureUnit"`
+	Modifier    string                `json:"modifier,omitempty"`
+	GramWeight  float64               `json:"gramWeight"`
+	Amount      float64               `json:"amount"`
+}
+
+// SimplifiedFood represents a food item with simplified nutrient information
+type SimplifiedFood struct {
+	Name         string                  `json:"name"`
+	Nutrients    []SimplifiedNutrient    `json:"nutrients"`
+	FoodPortions []SimplifiedFoodPortion `json:"foodPortions"`
+}
+
+// SimplifiedNutrientResponse represents the response for simplified nutrient searches
+type SimplifiedNutrientResponse struct {
+	Found bool             `json:"found"`
+	Count int              `json:"count"`
+	Foods []SimplifiedFood `json:"foods"`
+}
+
+// DefaultNutrients contains the standard set of nutrients to return by default
+// Optimized based on comprehensive analysis of USDA Foundation Foods data
+var DefaultNutrients = []string{
+	// Basic composition
+	"Water",
+	"Energy",
+	"Energy (Atwater General Factors)",
+	"Energy (Atwater Specific Factors)",
+	"Protein",
+	"Total lipid (fat)",
+	"Ash",
+	"Nitrogen",
+
+	// Carbohydrates and sugars
+	"Carbohydrate, by difference",
+	"Fiber, total dietary",
+	"Starch",
+	"Sugars, Total", // Total sugars (126 foods)
+	"Total Sugars",  // Alternative sugar naming variant (5 foods)
+	"Fructose",      // Individual sugar components
+	"Glucose",
+	"Sucrose",
+	"Lactose",
+	"Maltose",
+	"Galactose",
+
+	// Fats and fatty acids
+	"Fatty acids, total saturated",
+	"Fatty acids, total trans",
+	"Fatty acids, total monounsaturated",
+	"Fatty acids, total polyunsaturated",
+	"Cholesterol",
+	"Total fat (NLEA)", // NLEA compliant total fat
+	// Saturated fatty acids (SFA)
+	"SFA 4:0",  // Butyric acid
+	"SFA 6:0",  // Caproic acid
+	"SFA 8:0",  // Caprylic acid
+	"SFA 10:0", // Capric acid
+	"SFA 12:0", // Lauric acid
+	"SFA 14:0", // Myristic acid
+	"SFA 15:0", // Pentadecanoic acid
+	"SFA 16:0", // Palmitic acid
+	"SFA 17:0", // Margaric acid
+	"SFA 18:0", // Stearic acid
+	"SFA 20:0", // Arachidic acid
+	"SFA 24:0", // Lignoceric acid
+	// Monounsaturated fatty acids (MUFA)
+	"MUFA 14:1 c", // Myristoleic acid
+	"MUFA 16:1 c", // Palmitoleic acid
+	"MUFA 18:1 c", // Oleic acid
+	"MUFA 20:1 c", // Gadoleic acid
+	// Polyunsaturated fatty acids (PUFA)
+	"PUFA 18:2 c",               // Linoleic acid (alternative naming)
+	"PUFA 18:2 n-6 c,c",         // Linoleic acid (specific naming)
+	"PUFA 18:3 c",               // Alpha-linolenic acid (alternative naming)
+	"PUFA 18:3 n-3 c,c,c (ALA)", // Alpha-linolenic acid (specific naming)
+	"PUFA 20:3 c",               // Dihomo-gamma-linolenic acid
+	"PUFA 20:3 n-6",             // Dihomo-gamma-linolenic acid (n-6)
+	"PUFA 20:4",                 // Arachidonic acid
+	"PUFA 20:5 n-3 (EPA)",       // Eicosapentaenoic acid
+	"PUFA 22:5 n-3 (DPA)",       // Docosapentaenoic acid
+	"PUFA 22:6 n-3 (DHA)",       // Docosahexaenoic acid
+
+	// Minerals
+	"Sodium, Na",
+	"Calcium, Ca",
+	"Iron, Fe",
+	"Magnesium, Mg",
+	"Phosphorus, P",
+	"Potassium, K",
+	"Zinc, Zn",
+	"Copper, Cu",
+	"Manganese, Mn",
+	"Selenium, Se",
+	"Iodine, I",
+	"Molybdenum, Mo",
+
+	// Vitamins
+	"Vitamin A, RAE",
+	"Vitamin C, total ascorbic acid",
+	"Vitamin D (D2 + D3)",
+	"Vitamin E (alpha-tocopherol)",
+	"Tocopherol, beta",  // Beta-tocopherol
+	"Tocopherol, gamma", // Gamma-tocopherol
+	"Tocopherol, delta", // Delta-tocopherol
+	"Vitamin K (phylloquinone)",
+	"Vitamin K (Dihydrophylloquinone)", // Dihydrophylloquinone
+	"Vitamin K (Menaquinone-4)",        // Menaquinone-4
+	"Thiamin",
+	"Riboflavin",
+	"Niacin",
+	"Vitamin B-6",
+	"Folate, total",
+	"Vitamin B-12",
+	"Biotin",
+	"Pantothenic acid",
+	"Choline, total",
 }

@@ -31,11 +31,42 @@ This MCP server can operate in two distinct modes:
 
 ## Demo 📹
 
-TODO
+Check out the related project [noot-app/openfoodfacts-mcp-server](https://github.com/noot-app/openfoodfacts-mcp-server?tab=readme-ov-file#demo-) for a near identical MCP server with a demo video showcasing its capabilities and how to use it with Claude Desktop.
 
 ## How It Works 💡
 
-TODO
+This MCP server provides access to the USDA Foundation Foods database through three specialized tools, each designed for different use cases and levels of detail.
+
+## Available Tools 🛠️
+
+### 1. `search_foundation_foods_by_name`
+
+Basic food search with complete data
+
+- **Purpose**: Search for foods and get comprehensive food information
+- **Returns**: Complete food details including all available nutrients
+- **Best for**: Detailed nutritional analysis, research, when you need all available data
+- **Example**: Get complete nutritional profile for "milk" including every measured nutrient
+
+### 2. `search_foundation_foods_and_return_nutrients`
+
+Customizable nutrient filtering
+
+- **Purpose**: Search for foods with customizable nutrient selection
+- **Returns**: Essential nutrient data (name, amount, unit) for specified nutrients only
+- **Customization**: Accepts `nutrients_to_include` parameter to filter which nutrients to return
+- **Best for**: Targeted nutritional queries, meal planning, when you want specific nutrients
+- **Example**: Get only protein, calcium, and vitamin D data for "milk"
+
+### 3. `search_foundation_foods_and_return_nutrients_simplified`
+
+Fixed high-value nutrients (no customization)
+
+- **Purpose**: Search with a fixed, optimized set of essential nutrients
+- **Returns**: Default nutrient set
+- **Optimization**: Pre-selected nutrients based on comprehensive data analysis
+- **Best for**: Consistent results, general nutrition tracking, when you want the "best" nutrients without customization
+- **Example**: Get the top nutrients for "milk" - always the same essential nutrients
 
 ## Local Setup for Claude Desktop (STDIO Mode)
 
@@ -125,3 +156,11 @@ This will start an HTTP server on the configured port (default 8080) with:
 |----------|----------------|-------------|
 | `/health` | None | Health check endpoint |
 | `/mcp` | Bearer token | MCP JSON-RPC 2.0 endpoint |
+
+## STDIO Mode (Local Development)
+
+A cool tip for developing locally, you can actually do this and it will return a result from the MCP server:
+
+```bash
+echo '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_foundation_foods_and_return_nutrients_simplified", "arguments": {"name": "milk", "limit": 2}}, "id": 1}' | go run ./cmd/foundation-foods-mcp-server --stdio
+```
