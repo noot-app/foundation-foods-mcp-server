@@ -93,7 +93,7 @@ func (s *Server) addTools() {
 	s.mcpServer.AddTool(searchTool, s.handleFoodSearch)
 
 	// Simplified nutrients search tool
-	simplifiedTool := mcp.NewTool("search_foundation_foods_and_return_nutrients_simplified",
+	simplifiedTool := mcp.NewTool("search_foundation_foods_and_return_nutrients",
 		mcp.WithDescription("Search USDA foundation foods by name and return simplified nutrient information. Returns only essential nutrient data (name, amount, unit) for each food match. This tool is only meant to be used for generic product searches like 'milk', 'eggs', 'Cheese, cheddar', 'Broccoli, raw', etc."),
 		mcp.WithString("name",
 			mcp.Required(),
@@ -286,7 +286,7 @@ func (s *Server) handleSimplifiedFoodSearch(ctx context.Context, request mcp.Cal
 	// Extract nutrients_to_include parameter
 	nutrientsToInclude := request.GetStringSlice("nutrients_to_include", query.DefaultNutrients)
 
-	s.log.Debug("MCP search_foundation_foods_and_return_nutrients_simplified called",
+	s.log.Debug("MCP search_foundation_foods_and_return_nutrients called",
 		"name", name,
 		"limit", limit,
 		"nutrients_count", len(nutrientsToInclude))

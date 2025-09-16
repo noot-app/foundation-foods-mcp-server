@@ -571,7 +571,7 @@ func testSimplifiedNutrientSearch() error {
 		ID:      1002,
 		Method:  "tools/call",
 		Params: CallToolParams{
-			Name: "search_foundation_foods_and_return_nutrients_simplified",
+			Name: "search_foundation_foods_and_return_nutrients",
 			Arguments: map[string]interface{}{
 				"name":  "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D",
 				"limit": 1,
@@ -755,7 +755,7 @@ func testCustomNutrientFiltering() error {
 		ID:      1003,
 		Method:  "tools/call",
 		Params: CallToolParams{
-			Name: "search_foundation_foods_and_return_nutrients_simplified",
+			Name: "search_foundation_foods_and_return_nutrients",
 			Arguments: map[string]interface{}{
 				"name":                 "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D",
 				"limit":                1,

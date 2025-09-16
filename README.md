@@ -131,5 +131,5 @@ This will start an HTTP server on the configured port (default 8080) with:
 A cool tip for developing locally, you can actually do this and it will return a result from the MCP server:
 
 ```bash
-echo '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_foundation_foods_and_return_nutrients_simplified", "arguments": {"name": "milk", "limit": 2}}, "id": 1}' | go run ./cmd/foundation-foods-mcp-server --stdio
+echo '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_foundation_foods_and_return_nutrients", "arguments": {"name": "milk", "limit": 2}}, "id": 1}' | go run ./cmd/foundation-foods-mcp-server --stdio
 ```
