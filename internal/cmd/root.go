@@ -30,6 +30,7 @@ The server operates in three modes:
 Available MCP Tools:
 - search_foundation_foods_by_name: Search foundation foods by name
 - search_foundation_foods_and_return_nutrients: Search foods and return simplified nutrient info
+- search_foundation_foods_and_return_nutrients_simplified: Search foods and return simplified nutrient info fixed to the default nutrients
 
 Authentication (HTTP Mode Only):
 Bearer token authentication is required for all MCP endpoints except /health.
