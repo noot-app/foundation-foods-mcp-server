@@ -31,7 +31,7 @@ This MCP server can operate in two distinct modes:
 
 ## Demo 📹
 
-TODO
+Check out the related project [noot-app/openfoodfacts-mcp-server](https://github.com/noot-app/openfoodfacts-mcp-server?tab=readme-ov-file#demo-) for a near identical MCP server with a demo video showcasing its capabilities and how to use it with Claude Desktop.
 
 ## How It Works 💡
 
