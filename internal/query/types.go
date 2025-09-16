@@ -123,7 +123,7 @@ type QueryEngine interface {
 	SearchFoodsByName(ctx context.Context, query string, limit int) ([]FoundationFood, error)
 
 	// SearchFoodsByNameSimplified searches for foods and returns simplified nutrient information
-	SearchFoodsByNameSimplified(ctx context.Context, query string, limit int) (*SimplifiedNutrientResponse, error)
+	SearchFoodsByNameSimplified(ctx context.Context, query string, limit int, nutrientsToInclude []string) (*SimplifiedNutrientResponse, error)
 
 	// GetFoodByFdcId retrieves a specific food by its FDC ID
 	GetFoodByFdcId(ctx context.Context, fdcId int) (*FoundationFood, error)
@@ -170,4 +170,62 @@ type SimplifiedNutrientResponse struct {
 	Found bool             `json:"found"`
 	Count int              `json:"count"`
 	Foods []SimplifiedFood `json:"foods"`
+}
+
+// DefaultNutrients contains the standard set of nutrients to return by default
+var DefaultNutrients = []string{
+	// Macronutrients
+	"Energy",
+	"Protein",
+	"Total lipid (fat)",
+	"Fatty acids, total saturated",
+	"Fatty acids, total trans",
+	"Fatty acids, total monounsaturated",
+	"Fatty acids, total polyunsaturated",
+	"Cholesterol",
+	"Sodium, Na",
+	"Carbohydrate, by difference",
+	"Fiber, total dietary",
+	"Sugars, total including NLEA",
+	"Sugars, added",
+
+	// Vitamins
+	"Vitamin A, RAE",
+	"Vitamin C, total ascorbic acid",
+	"Vitamin D (D2 + D3)",
+	"Vitamin E (alpha-tocopherol)",
+	"Vitamin K (phylloquinone)",
+	"Thiamin",
+	"Riboflavin",
+	"Niacin",
+	"Vitamin B-6",
+	"Folate, total",
+	"Vitamin B-12",
+	"Biotin",
+	"Pantothenic acid",
+	"Choline, total",
+
+	// Minerals
+	"Calcium, Ca",
+	"Iron, Fe",
+	"Magnesium, Mg",
+	"Phosphorus, P",
+	"Potassium, K",
+	"Zinc, Zn",
+	"Copper, Cu",
+	"Manganese, Mn",
+	"Selenium, Se",
+	"Iodine, I",
+	"Molybdenum, Mo",
+	"Chromium, Cr",
+	"Fluoride, F",
+
+	// Fatty Acids & Special Compounds
+	"18:3 n-3 c,c,c (ALA)",
+	"20:5 n-3 (EPA)",
+	"22:6 n-3 (DHA)",
+	"18:2 n-6 c,c",
+	"Alcohol, ethyl",
+	"Caffeine",
+	"Creatine",
 }

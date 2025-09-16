@@ -132,7 +132,7 @@ func (e *Engine) Health(ctx context.Context) error {
 }
 
 // SearchFoodsByNameSimplified searches for foods and returns simplified nutrient information
-func (e *Engine) SearchFoodsByNameSimplified(ctx context.Context, query string, limit int) (*SimplifiedNutrientResponse, error) {
+func (e *Engine) SearchFoodsByNameSimplified(ctx context.Context, query string, limit int, nutrientsToInclude []string) (*SimplifiedNutrientResponse, error) {
 	// Use the existing search functionality
 	foods, err := e.SearchFoodsByName(ctx, query, limit)
 	if err != nil {
@@ -148,18 +148,27 @@ func (e *Engine) SearchFoodsByNameSimplified(ctx context.Context, query string, 
 			FoodPortions: make([]SimplifiedFoodPortion, 0, len(food.FoodPortions)),
 		}
 
-		// Convert nutrients to simplified format
+		// Convert nutrients to simplified format with filtering
 		for _, nutrient := range food.FoodNutrients {
-			simplifiedNutrient := SimplifiedNutrient{
-				Name:       nutrient.Nutrient.Name,
-				UnitName:   nutrient.Nutrient.UnitName,
-				Amount:     nutrient.Amount,
-				DataPoints: nutrient.DataPoints,
-				Max:        nutrient.Max,
-				Min:        nutrient.Min,
-				Median:     nutrient.Median,
+			// Skip Energy in kJ - we only want kcal
+			if strings.ToLower(strings.TrimSpace(nutrient.Nutrient.Name)) == "energy" &&
+				strings.ToLower(strings.TrimSpace(nutrient.Nutrient.UnitName)) == "kj" {
+				continue
 			}
-			simplifiedFood.Nutrients = append(simplifiedFood.Nutrients, simplifiedNutrient)
+
+			// Check if this nutrient should be included
+			if e.shouldIncludeNutrient(nutrient.Nutrient.Name, nutrientsToInclude) {
+				simplifiedNutrient := SimplifiedNutrient{
+					Name:       nutrient.Nutrient.Name,
+					UnitName:   nutrient.Nutrient.UnitName,
+					Amount:     nutrient.Amount,
+					DataPoints: nutrient.DataPoints,
+					Max:        nutrient.Max,
+					Min:        nutrient.Min,
+					Median:     nutrient.Median,
+				}
+				simplifiedFood.Nutrients = append(simplifiedFood.Nutrients, simplifiedNutrient)
+			}
 		}
 
 		// Convert food portions to simplified format
@@ -334,4 +343,23 @@ func adjustScoreForFoodContext(description, normalizedQuery string, queryWords [
 	}
 
 	return currentScore
+}
+
+// shouldIncludeNutrient checks if a nutrient should be included based on the filter list
+func (e *Engine) shouldIncludeNutrient(nutrientName string, nutrientsToInclude []string) bool {
+	// If no filter is specified, include all nutrients
+	if len(nutrientsToInclude) == 0 {
+		return true
+	}
+
+	// Check if the nutrient name matches any in the include list (case-insensitive)
+	normalizedNutrientName := strings.ToLower(strings.TrimSpace(nutrientName))
+	for _, includeName := range nutrientsToInclude {
+		normalizedIncludeName := strings.ToLower(strings.TrimSpace(includeName))
+		if normalizedNutrientName == normalizedIncludeName {
+			return true
+		}
+	}
+
+	return false
 }

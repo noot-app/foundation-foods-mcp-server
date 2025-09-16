@@ -106,6 +106,11 @@ func (s *Server) addTools() {
 			mcp.Min(1),
 			mcp.Max(10),
 		),
+		mcp.WithArray("nutrients_to_include",
+			mcp.Description("Optional list of nutrient names to include in the response. If empty or not provided, a default set of essential nutrients will be included."),
+			mcp.Items([]string{}),
+			mcp.DefaultArray(query.DefaultNutrients),
+		),
 		mcp.WithOutputSchema[query.SimplifiedNutrientResponse](),
 		mcp.WithIdempotentHintAnnotation(true),
 	)
@@ -278,12 +283,16 @@ func (s *Server) handleSimplifiedFoodSearch(ctx context.Context, request mcp.Cal
 		limit = 10
 	}
 
+	// Extract nutrients_to_include parameter
+	nutrientsToInclude := request.GetStringSlice("nutrients_to_include", query.DefaultNutrients)
+
 	s.log.Debug("MCP search_foundation_foods_and_return_nutrients_simplified called",
 		"name", name,
-		"limit", limit)
+		"limit", limit,
+		"nutrients_count", len(nutrientsToInclude))
 
 	// Execute simplified search
-	response, err := s.queryEngine.SearchFoodsByNameSimplified(ctx, name, limit)
+	response, err := s.queryEngine.SearchFoodsByNameSimplified(ctx, name, limit, nutrientsToInclude)
 	if err != nil {
 		s.log.Error("Simplified food search failed", "error", err)
 		return mcp.NewToolResultError(fmt.Sprintf("Search failed: %v", err)), nil
