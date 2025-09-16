@@ -352,13 +352,49 @@ func (e *Engine) shouldIncludeNutrient(nutrientName string, nutrientsToInclude [
 		return true
 	}
 
-	// Check if the nutrient name matches any in the include list (case-insensitive)
 	normalizedNutrientName := strings.ToLower(strings.TrimSpace(nutrientName))
+
 	for _, includeName := range nutrientsToInclude {
 		normalizedIncludeName := strings.ToLower(strings.TrimSpace(includeName))
+
+		// Direct exact match
 		if normalizedNutrientName == normalizedIncludeName {
 			return true
 		}
+
+		// Enhanced matching for alternative names
+		if e.isAlternativeNutrientName(normalizedNutrientName, normalizedIncludeName) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// isAlternativeNutrientName checks if two nutrient names refer to the same nutrient
+func (e *Engine) isAlternativeNutrientName(dataName, filterName string) bool {
+	// Handle legacy fatty acid naming - check if filter name without PUFA prefix matches data name with PUFA prefix
+	if strings.HasPrefix(filterName, "pufa ") {
+		withoutPrefix := strings.TrimPrefix(filterName, "pufa ")
+		if dataName == withoutPrefix {
+			return true
+		}
+	}
+
+	// Handle reverse case - data has PUFA prefix but filter doesn't
+	if strings.HasPrefix(dataName, "pufa ") {
+		withoutPrefix := strings.TrimPrefix(dataName, "pufa ")
+		if filterName == withoutPrefix {
+			return true
+		}
+	}
+
+	// Note: Sugar variants are treated as separate nutrients - no alternative mapping
+
+	// Handle vitamin C variations
+	if (filterName == "vitamin c, total ascorbic acid" && dataName == "vitamin c") ||
+		(filterName == "vitamin c" && dataName == "vitamin c, total ascorbic acid") {
+		return true
 	}
 
 	return false
