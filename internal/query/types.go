@@ -135,12 +135,9 @@ type QueryEngine interface {
 // SimplifiedNutrient represents a nutrient with only essential information
 type SimplifiedNutrient struct {
 	Name       string  `json:"name"`
-	UnitName   string  `json:"unitName"`
+	Unit       string  `json:"unit"`
 	Amount     float64 `json:"amount"`
-	DataPoints int     `json:"dataPoints,omitempty"`
-	Max        float64 `json:"max,omitempty"`
-	Min        float64 `json:"min,omitempty"`
-	Median     float64 `json:"median,omitempty"`
+	DataPoints int     `json:"dataPoints"`
 }
 
 // SimplifiedMeasureUnit represents a simplified measure unit
@@ -176,27 +173,16 @@ type SimplifiedNutrientResponse struct {
 // Optimized based on comprehensive analysis of USDA Foundation Foods data
 var DefaultNutrients = []string{
 	// Basic composition
-	"Water",
 	"Energy",
-	"Energy (Atwater General Factors)",
-	"Energy (Atwater Specific Factors)",
 	"Protein",
 	"Total lipid (fat)",
-	"Ash",
-	"Nitrogen",
 
 	// Carbohydrates and sugars
 	"Carbohydrate, by difference",
 	"Fiber, total dietary",
-	"Starch",
 	"Sugars, Total", // Total sugars (126 foods)
 	"Total Sugars",  // Alternative sugar naming variant (5 foods)
 	"Fructose",      // Individual sugar components
-	"Glucose",
-	"Sucrose",
-	"Lactose",
-	"Maltose",
-	"Galactose",
 
 	// Fats and fatty acids
 	"Fatty acids, total saturated",

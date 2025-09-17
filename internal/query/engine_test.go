@@ -391,10 +391,10 @@ func TestEngine_SearchFoodsByNameSimplified_FiltersKilojouleEnergy(t *testing.T)
 		if nutrient.Name == "Energy" {
 			energyFound = true
 			// Should be kcal, not kJ
-			assert.Equal(t, "kcal", nutrient.UnitName, "Energy should only be in kcal units")
+			assert.Equal(t, "kcal", nutrient.Unit, "Energy should only be in kcal units")
 			assert.Equal(t, 100.0, nutrient.Amount, "Energy amount should match kcal value")
 
-			if nutrient.UnitName == "kJ" {
+			if nutrient.Unit == "kJ" {
 				kilojouleFound = true
 			}
 		}
