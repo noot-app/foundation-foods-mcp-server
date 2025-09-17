@@ -160,12 +160,9 @@ func (e *Engine) SearchFoodsByNameSimplified(ctx context.Context, query string, 
 			if e.shouldIncludeNutrient(nutrient.Nutrient.Name, nutrientsToInclude) {
 				simplifiedNutrient := SimplifiedNutrient{
 					Name:       nutrient.Nutrient.Name,
-					UnitName:   nutrient.Nutrient.UnitName,
+					Unit:       nutrient.Nutrient.UnitName,
 					Amount:     nutrient.Amount,
 					DataPoints: nutrient.DataPoints,
-					Max:        nutrient.Max,
-					Min:        nutrient.Min,
-					Median:     nutrient.Median,
 				}
 				simplifiedFood.Nutrients = append(simplifiedFood.Nutrients, simplifiedNutrient)
 			}
