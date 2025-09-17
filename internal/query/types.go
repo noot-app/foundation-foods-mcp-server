@@ -178,48 +178,24 @@ var DefaultNutrients = []string{
 	"Total lipid (fat)",
 
 	// Carbohydrates and sugars
-	"Carbohydrate, by difference",
-	"Fiber, total dietary",
-	"Sugars, Total", // Total sugars (126 foods)
-	"Total Sugars",  // Alternative sugar naming variant (5 foods)
-	"Fructose",      // Individual sugar components
+	"Carbohydrate, by difference", // total_carbs_g
+	"Fiber, total dietary",        // dietary_fiber_g
+	"Sugars, Total",               // total_sugars_g (126 foods)
+	"Total Sugars",                // total_sugars_g (alternative naming - 5 foods)
 
 	// Fats and fatty acids
-	"Fatty acids, total saturated",
-	"Fatty acids, total trans",
-	"Fatty acids, total monounsaturated",
-	"Fatty acids, total polyunsaturated",
-	"Cholesterol",
-	"Total fat (NLEA)", // NLEA compliant total fat
-	// Saturated fatty acids (SFA)
-	"SFA 4:0",  // Butyric acid
-	"SFA 6:0",  // Caproic acid
-	"SFA 8:0",  // Caprylic acid
-	"SFA 10:0", // Capric acid
-	"SFA 12:0", // Lauric acid
-	"SFA 14:0", // Myristic acid
-	"SFA 15:0", // Pentadecanoic acid
-	"SFA 16:0", // Palmitic acid
-	"SFA 17:0", // Margaric acid
-	"SFA 18:0", // Stearic acid
-	"SFA 20:0", // Arachidic acid
-	"SFA 24:0", // Lignoceric acid
-	// Monounsaturated fatty acids (MUFA)
-	"MUFA 14:1 c", // Myristoleic acid
-	"MUFA 16:1 c", // Palmitoleic acid
-	"MUFA 18:1 c", // Oleic acid
-	"MUFA 20:1 c", // Gadoleic acid
-	// Polyunsaturated fatty acids (PUFA)
-	"PUFA 18:2 c",               // Linoleic acid (alternative naming)
-	"PUFA 18:2 n-6 c,c",         // Linoleic acid (specific naming)
-	"PUFA 18:3 c",               // Alpha-linolenic acid (alternative naming)
-	"PUFA 18:3 n-3 c,c,c (ALA)", // Alpha-linolenic acid (specific naming)
-	"PUFA 20:3 c",               // Dihomo-gamma-linolenic acid
-	"PUFA 20:3 n-6",             // Dihomo-gamma-linolenic acid (n-6)
-	"PUFA 20:4",                 // Arachidonic acid
-	"PUFA 20:5 n-3 (EPA)",       // Eicosapentaenoic acid
-	"PUFA 22:5 n-3 (DPA)",       // Docosapentaenoic acid
-	"PUFA 22:6 n-3 (DHA)",       // Docosahexaenoic acid
+	"Total lipid (fat)",                  // total_fat_g
+	"Total fat (NLEA)",                   // NLEA compliant total fat
+	"Fatty acids, total saturated",       // saturated_fat_g
+	"Fatty acids, total trans",           // trans_fat_g
+	"Fatty acids, total monounsaturated", // monounsaturated_fat_g
+	"Fatty acids, total polyunsaturated", // polyunsaturated_fat_g
+	"Cholesterol",                        // cholesterol_mg
+	// Essential omega fatty acids only
+	"PUFA 18:3 n-3 c,c,c (ALA)", // omega3_ala_g (Alpha-linolenic acid)
+	"PUFA 20:5 n-3 (EPA)",       // omega3_epa_g (Eicosapentaenoic acid)
+	"PUFA 22:6 n-3 (DHA)",       // omega3_dha_g (Docosahexaenoic acid)
+	"PUFA 18:2 n-6 c,c",         // omega6_g (Linoleic acid - primary omega-6)
 
 	// Minerals
 	"Sodium, Na",
